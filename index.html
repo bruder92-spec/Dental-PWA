@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DentAssist"/>
+  <title>DentAssist Pro</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+    .page{display:none;padding:16px 16px 90px}
+    .page.active{display:block}
+    .card{background:#1e293b;border-radius:16px;padding:14px;border:1px solid #334155;margin-bottom:12px}
+    .btn{background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:14px;padding:8px 14px}
+    .back-btn{width:36px;height:36px;border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center}
+    .label{font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+    input{width:100%;padding:12px 14px 12px 40px;background:#1e293b;border:1px solid #334155;border-radius:12px;color:#f1f5f9;font-size:15px;outline:none}
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#1e293b;border-top:1px solid #334155;display:flex;padding:10px 0 20px;z-index:100}
+    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:#475569;font-size:10px;font-weight:600}
+    .nav-btn.active{color:#38bdf8}
+    .nav-icon{font-size:22px}
+    .tooth{width:34px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border:2px solid transparent;transition:all .15s;flex-shrink:0}
+    .tooth-num{font-size:9px;color:#475569;text-align:center}
+    .teeth-row{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
+    .cond-btn{padding:5px 10px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;transition:all .1s}
+    .drug-item{background:#1e293b;border-radius:14px;padding:14px 16px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
+    .drug-name{font-weight:600;font-size:15px;color:#f1f5f9}
+    .drug-dose{font-size:13px;color:#38bdf8;margin-top:3px;font-weight:500}
+    .drug-note{margin-top:10px;padding:10px 12px;background:#0f172a;border-radius:10px;font-size:13px;color:#94a3b8;line-height:1.5}
+    .cat-btn{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid #334155;background:#1e293b;color:#64748b}
+    .cat-btn.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+    .cats{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px}
+    .apply-btn{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;padding:14px;border-radius:14px;color:#fff;font-weight:700;font-size:15px;border:none;cursor:pointer;z-index:50}
+    .tag{padding:4px 10px;border-radius:8px;font-size:12px;display:inline-block;margin:3px}
+    .row-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    h2{font-size:20px;font-weight:700;margin:0}
+    .search-wrap{position:relative;margin-bottom:16px}
+    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#475569;font-size:16px}
+    .stat-card{background:#1e293b;border-radius:16px;padding:16px;border:1px solid #334155}
+    .menu-btn{background:#1e293b;border:1px solid #334155;border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;text-align:left;width:100%;margin-bottom:12px}
+    .menu-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+  </style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div style="padding:20px 20px 0">
+    <p style="color:#64748b;font-size:13px">Добро пожаловать</p>
+    <h1 style="font-size:28px;font-weight:700;letter-spacing:-.5px;margin:4px 0 20px">DentAssist <span style="color:#38bdf8">Pro</span></h1>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div class="stat-card">
+        <div style="font-size:24px;margin-bottom:4px">🦷</div>
+        <div id="stat-teeth" style="font-size:26px;font-weight:700;color:#38bdf8">0</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">Зубов отмечено</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:24px;margin-bottom:4px">💊</div>
+        <div style="font-size:26px;font-weight:700;color:#38bdf8">17</div>
+        <div style="font-size:11px;color:#64748b;margin-top:2px">Препаратов в базе</div>
+      </div>
+    </div>
+    <button class="menu-btn" onclick="showPage('odonto')">
+      <div class="menu-icon-wrap" style="background:#0ea5e922;border:1px solid #0ea5e944">🦷</div>
+      <div><div style="font-weight:600;font-size:16px;color:#f1f5f9">Одонтограмма</div><div style="font-size:13px;color:#64748b;margin-top:2px">Интерактивная формула зубов</div></div>
+      <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
+    </button>
+    <button class="menu-btn" onclick="showPage('drugs')">
+      <div class="menu-icon-wrap" style="background:#8b5cf622;border:1px solid #8b5cf644">💊</div>
+      <div><div style="font-weight:600;font-size:16px;color:#f1f5f9">Справочник препаратов</div><div style="font-size:13px;color:#64748b;margin-top:2px">Дозировки и показания</div></div>
+      <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
+    </button>
+    <div class="card">
+      <div class="label">Условные обозначения</div>
+      <div id="legend"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ODONTOGRAM -->
+<div id="page-odonto" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('home')">‹</button>
+    <h2>Одонтограмма</h2>
+  </div>
+  <div class="card">
+    <div class="label">Выберите состояние</div>
+    <div id="cond-btns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
+  <div class="card">
+    <div class="label">Верхняя челюсть</div>
+    <div class="teeth-row" id="upper-teeth"></div>
+  </div>
+  <div class="card">
+    <div class="label">Нижняя челюсть</div>
+    <div class="teeth-row" id="lower-teeth"></div>
+  </div>
+  <div class="card" id="summary-card" style="display:none">
+    <div class="label">Отмеченные зубы</div>
+    <div id="summary-tags"></div>
+    <button class="btn" style="margin-top:12px;color:#ef4444;border-color:#ef444433" onclick="resetTeeth()">Сбросить всё</button>
+  </div>
+</div>
+
+<!-- DRUGS -->
+<div id="page-drugs" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('home')">‹</button>
+    <h2>Справочник препаратов</h2>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="drug-search" placeholder="Поиск препарата..." oninput="renderDrugs()"/>
+  </div>
+  <div class="cats" id="cat-tabs"></div>
+  <div id="drug-list"></div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="showPage('home')"><span class="nav-icon">🏠</span>Главная</button>
+  <button class="nav-btn" id="nav-odonto" onclick="showPage('odonto')"><span class="nav-icon">🦷</span>Зубы</button>
+  <button class="nav-btn" id="nav-drugs" onclick="showPage('drugs')"><span class="nav-icon">💊</span>Препараты</button>
+</div>
+
+<script>
+const CONDITIONS = [
+  {code:"H",label:"Здоров",color:"#22c55e"},
+  {code:"K",label:"Кариес",color:"#f59e0b"},
+  {code:"P",label:"Пульпит",color:"#f97316"},
+  {code:"Pt",label:"Периодонтит",color:"#ef4444"},
+  {code:"R",label:"Корень",color:"#8b5cf6"},
+  {code:"O",label:"Отсутствует",color:"#94a3b8"},
+  {code:"I",label:"Имплант",color:"#06b6d4"},
+  {code:"KC",label:"Коронка",color:"#3b82f6"},
+  {code:"П",label:"Пломба",color:"#10b981"},
+];
+
+const DRUGS = [
+  {cat:"Анестетики",icon:"💉",items:[
+    {name:"Артикаин (Ультракаин)",dose:"1.7–3.4 мл (1–2 карп.)",note:"Мax 7 мг/кг. С эпинефрином 1:100 000 или 1:200 000"},
+    {name:"Лидокаин 2%",dose:"2–5 мл",note:"Мax 4.4 мг/кг, не более 300 мг"},
+    {name:"Мепивакаин 3%",dose:"1.7–3.4 мл",note:"Без вазоконстриктора. Мax 6.6 мг/кг"},
+  ]},
+  {cat:"Антибиотики",icon:"💊",items:[
+    {name:"Амоксициллин",dose:"500 мг × 3 р/сут",note:"Курс 5–7 дней. При аллергии — азитромицин"},
+    {name:"Линкомицин",dose:"500 мг × 3 р/сут",note:"При непереносимости пенициллинов"},
+    {name:"Метронидазол",dose:"500 мг × 3 р/сут",note:"Часто в комбинации с амоксициллином"},
+    {name:"Клиндамицин",dose:"300 мг × 4 р/сут",note:"Резервный, при тяжёлых инфекциях"},
+  ]},
+  {cat:"НПВС / Анальгетики",icon:"🩹",items:[
+    {name:"Ибупрофен",dose:"400–600 мг × 3 р/сут",note:"После еды. Мax 2400 мг/сут"},
+    {name:"Кеторолак",dose:"10 мг × 3–4 р/сут",note:"Не более 5 дней. Мощный анальгетик"},
+    {name:"Нимесулид",dose:"100 мг × 2 р/сут",note:"После еды. Мax 200 мг/сут"},
+    {name:"Парацетамол",dose:"500–1000 мг × 4 р/сут",note:"Мax 4 г/сут. Безопасен при язве"},
+  ]},
+  {cat:"Антисептики",icon:"🧪",items:[
+    {name:"Хлоргексидин 0.05–0.2%",dose:"Полоскание 1 мин × 2 р/сут",note:"Курс до 14 дней"},
+    {name:"Мирамистин 0.01%",dose:"Орошение / полоскание",note:"Широкий спектр, включая вирусы"},
+    {name:"Перекись водорода 3%",dose:"Промывание раны",note:"Разводить 1:1 с водой для полоскания"},
+  ]},
+  {cat:"Гемостатики",icon:"🔴",items:[
+    {name:"Капрофер",dose:"Местно на тампон",note:"Химическая коагуляция"},
+    {name:"Адреналин 0.1%",dose:"Местно на тампон (1–2 кап)",note:"Вазоконстрикция, кратковременно"},
+    {name:"Альвожил / Альвостаз",dose:"Заполнить лунку",note:"При альвеолите"},
+  ]},
+];
+
+const UPPER = [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28];
+const LOWER = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+
+let toothStates = {};
+let selectedTooth = null;
+let selectedCond = CONDITIONS[0];
+let activeDrug = null;
+let activeCat = "Анестетики";
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + id).classList.add('active');
+  if (id === 'home') updateStats();
+}
+
+function updateStats() {
+  document.getElementById('stat-teeth').textContent = Object.keys(toothStates).length;
+}
+
+function renderLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = CONDITIONS.map(c =>
+    `<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;margin:3px">
+      <span style="width:10px;height:10px;border-radius:3px;background:${c.color};display:inline-block"></span>
+      <span style="color:#94a3b8">${c.code} — ${c.label}</span>
+    </span>`
+  ).join('');
+}
+
+function renderCondBtns() {
+  const el = document.getElementById('cond-btns');
+  el.innerHTML = CONDITIONS.map(c =>
+    `<button class="cond-btn" id="cb-${c.code}" onclick="selectCond('${c.code}')"
+      style="${selectedCond.code===c.code ? `background:${c.color};color:#fff;border-color:${c.color}` : ''}"
+    >${c.code} ${c.label}</button>`
+  ).join('');
+}
+
+function selectCond(code) {
+  selectedCond = CONDITIONS.find(c => c.code === code);
+  renderCondBtns();
+  renderTeeth();
+}
+
+function renderTeeth() {
+  ['upper','lower'].forEach((jaw, ji) => {
+    const teeth = ji === 0 ? UPPER : LOWER;
+    const el = document.getElementById(jaw + '-teeth');
+    el.innerHTML = teeth.map(num => {
+      const st = toothStates[num];
+      const isSel = selectedTooth === num;
+      const bg = isSel ? selectedCond.color : (st ? st.color : '#e2e8f0');
+      const txt = st ? st.code : '';
+      const shadow = isSel ? `box-shadow:0 0 12px ${selectedCond.color}` : '';
+      const borderC = isSel ? 'white' : 'transparent';
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0">
+        <div class="tooth-num">${num}</div>
+        <div class="tooth" onclick="clickTooth(${num})"
+          style="background:${bg};border-color:${borderC};${shadow};color:${(st||isSel)?'#fff':'#64748b'}"
+        >${txt}</div>
+      </div>`;
+    }).join('');
+  });
+
+  // apply btn
+  let btn = document.getElementById('apply-btn');
+  if (selectedTooth) {
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'apply-btn';
+      btn.className = 'apply-btn';
+      btn.onclick = applyCondition;
+      document.body.appendChild(btn);
+    }
+    btn.style.background = selectedCond.color;
+    btn.style.boxShadow = `0 4px 20px ${selectedCond.color}66`;
+    btn.textContent = `Зуб ${selectedTooth}: отметить как «${selectedCond.label}»`;
+  } else {
+    if (btn) btn.remove();
+  }
+}
+
+function clickTooth(num) {
+  selectedTooth = selectedTooth === num ? null : num;
+  renderTeeth();
+}
+
+function applyCondition() {
+  if (!selectedTooth) return;
+  toothStates[selectedTooth] = selectedCond;
+  selectedTooth = null;
+  renderTeeth();
+  renderSummary();
+}
+
+function renderSummary() {
+  const keys = Object.keys(toothStates);
+  const card = document.getElementById('summary-card');
+  const tags = document.getElementById('summary-tags');
+  if (keys.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  tags.innerHTML = keys.map(num => {
+    const c = toothStates[num];
+    return `<span class="tag" style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44">${num}: ${c.label}</span>`;
+  }).join('');
+}
+
+function resetTeeth() {
+  toothStates = {};
+  renderTeeth();
+  renderSummary();
+  updateStats();
+}
+
+function renderCatTabs() {
+  const el = document.getElementById('cat-tabs');
+  el.innerHTML = DRUGS.map(d =>
+    `<button class="cat-btn ${activeCat===d.cat?'active':''}" onclick="selectCat('${d.cat}')">${d.icon} ${d.cat}</button>`
+  ).join('');
+}
+
+function selectCat(cat) {
+  activeCat = cat;
+  renderCatTabs();
+  renderDrugs();
+}
+
+function renderDrugs() {
+  const q = document.getElementById('drug-search').value.toLowerCase();
+  const tabs = document.getElementById('cat-tabs');
+  tabs.style.display = q ? 'none' : 'flex';
+
+  const el = document.getElementById('drug-list');
+  let html = '';
+  DRUGS.forEach(cat => {
+    const items = q ? cat.items.filter(d => d.name.toLowerCase().includes(q) || d.dose.toLowerCase().includes(q)) : (activeCat === cat.cat ? cat.items : []);
+    if (!items.length) return;
+    if (q) html += `<div class="label" style="margin-bottom:6px">${cat.icon} ${cat.cat}</div>`;
+    items.forEach((drug, i) => {
+      const key = cat.cat + i;
+      const open = activeDrug === key;
+      html += `<div class="drug-item" onclick="toggleDrug('${key}')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div class="drug-name">${drug.name}</div><div class="drug-dose">${drug.dose}</div></div>
+          <span style="color:#475569">${open?'▲':'▼'}</span>
+        </div>
+        ${open ? `<div class="drug-note">📝 ${drug.note}</div>` : ''}
+      </div>`;
+    });
+  });
+  el.innerHTML = html;
+}
+
+function toggleDrug(key) {
+  activeDrug = activeDrug === key ? null : key;
+  renderDrugs();
+}
+
+// Init
+renderLegend();
+renderCondBtns();
+renderTeeth();
+renderCatTabs();
+renderDrugs();
+
+// PWA Service Worker
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE='dental-v1';
+    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.add('/'))));
+    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+</script>
+
+<!-- Inline manifest via JS for guaranteed PWA detection -->
+<script>
+(function(){
+  const manifest = {
+    name: "DentAssist Pro — Помощник стоматолога",
+    short_name: "DentAssist",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#0f172a",
+    theme_color: "#0f172a",
+    orientation: "portrait",
+    icons: [{
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230f172a'/%3E%3Ctext y='130' x='30' font-size='120'%3E🦷%3C/text%3E%3C/svg%3E",
+      sizes: "192x192",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = url;
+  document.head.appendChild(link);
+})();
+</script>
+</body>
+</html>
