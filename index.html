@@ -12,84 +12,142 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
-    .page{display:none;padding:16px 16px 90px}
+    .page{display:none;padding:16px 16px 90px;animation:fadeIn .2s ease}
     .page.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
     .card{background:#1e293b;border-radius:16px;padding:14px;border:1px solid #334155;margin-bottom:12px}
-    .btn{background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:14px;padding:8px 14px}
-    .back-btn{width:36px;height:36px;border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center}
+    .btn{background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:14px;padding:8px 14px;transition:all .15s}
+    .btn:active{opacity:.7}
+    .btn-primary{background:#0ea5e9;border-color:#0ea5e9;color:#fff;font-weight:600}
+    .btn-danger{background:#ef444422;border-color:#ef444444;color:#ef4444}
+    .back-btn{width:36px;height:36px;border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .label{font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-    input{width:100%;padding:12px 14px 12px 40px;background:#1e293b;border:1px solid #334155;border-radius:12px;color:#f1f5f9;font-size:15px;outline:none}
-    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#1e293b;border-top:1px solid #334155;display:flex;padding:10px 0 20px;z-index:100}
-    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:#475569;font-size:10px;font-weight:600}
+    input,textarea,select{width:100%;padding:11px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none;font-family:inherit}
+    input:focus,textarea:focus,select:focus{border-color:#0ea5e9}
+    select option{background:#1e293b}
+    textarea{resize:none;line-height:1.5}
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#1e293b;border-top:1px solid #334155;display:flex;padding:8px 0 18px;z-index:100}
+    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;color:#475569;font-size:10px;font-weight:600;transition:color .15s}
     .nav-btn.active{color:#38bdf8}
-    .nav-icon{font-size:22px}
-    .tooth{width:34px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border:2px solid transparent;transition:all .15s;flex-shrink:0}
-    .tooth-num{font-size:9px;color:#475569;text-align:center}
-    .teeth-row{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
-    .cond-btn{padding:5px 10px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;transition:all .1s}
-    .drug-item{background:#1e293b;border-radius:14px;padding:14px 16px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
-    .drug-name{font-weight:600;font-size:15px;color:#f1f5f9}
-    .drug-dose{font-size:13px;color:#38bdf8;margin-top:3px;font-weight:500}
-    .drug-note{margin-top:10px;padding:10px 12px;background:#0f172a;border-radius:10px;font-size:13px;color:#94a3b8;line-height:1.5}
-    .cat-btn{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid #334155;background:#1e293b;color:#64748b}
-    .cat-btn.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
-    .cats{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px}
-    .apply-btn{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;padding:14px;border-radius:14px;color:#fff;font-weight:700;font-size:15px;border:none;cursor:pointer;z-index:50}
-    .tag{padding:4px 10px;border-radius:8px;font-size:12px;display:inline-block;margin:3px}
-    .row-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .nav-icon{font-size:20px}
+    .row-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
     h2{font-size:20px;font-weight:700;margin:0}
-    .search-wrap{position:relative;margin-bottom:16px}
-    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#475569;font-size:16px}
-    .stat-card{background:#1e293b;border-radius:16px;padding:16px;border:1px solid #334155}
-    .menu-btn{background:#1e293b;border:1px solid #334155;border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;text-align:left;width:100%;margin-bottom:12px}
-    .menu-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+    h3{font-size:16px;font-weight:600;margin:0}
+    .badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+    .modal-overlay{display:none;position:fixed;inset:0;background:#00000088;z-index:200;align-items:flex-end;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#1e293b;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:430px;max-height:90vh;overflow-y:auto;animation:slideUp .25s ease}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .modal-handle{width:40px;height:4px;background:#334155;border-radius:2px;margin:0 auto 16px}
+    .form-row{margin-bottom:12px}
+    .form-label{font-size:12px;color:#64748b;margin-bottom:4px;display:block}
+    .tooth{width:32px;height:36px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid transparent;transition:all .15s;flex-shrink:0}
+    .teeth-row{display:flex;gap:3px;overflow-x:auto;padding-bottom:4px}
+    .tooth-num{font-size:8px;color:#475569;text-align:center}
+    .cond-btn{padding:4px 9px;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;transition:all .1s;white-space:nowrap}
+    .drug-item{background:#1e293b;border-radius:14px;padding:13px 15px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
+    .cat-btn{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid #334155;background:#1e293b;color:#64748b;transition:all .15s}
+    .cat-btn.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+    .cats{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
+    .patient-card{background:#1e293b;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #334155;cursor:pointer;transition:all .15s}
+    .patient-card:active{opacity:.7}
+    .avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .search-wrap{position:relative;margin-bottom:14px}
+    .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#475569;pointer-events:none}
+    .search-wrap input{padding-left:38px}
+    .calc-result{background:#0f172a;border-radius:12px;padding:14px;margin-top:12px;border:1px solid #334155}
+    .calc-drug-btn{padding:8px 12px;border-radius:10px;font-size:13px;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;margin:4px;transition:all .1s;text-align:left}
+    .calc-drug-btn.active{background:#0ea5e922;color:#0ea5e9;border-color:#0ea5e944}
+    .mkb-item{background:#1e293b;border-radius:12px;padding:12px 14px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
+    .treatment-step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #1e293b}
+    .step-check{width:22px;height:22px;border-radius:6px;border:2px solid #334155;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+    .step-check.done{background:#22c55e;border-color:#22c55e}
+    .divider{height:1px;background:#1e293b;margin:12px 0}
+    .tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;margin:2px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat-mini{background:#1e293b;border-radius:12px;padding:12px;border:1px solid #334155;text-align:center}
+    .empty{text-align:center;padding:40px 20px;color:#475569}
+    .empty-icon{font-size:40px;margin-bottom:8px}
+    .fab{position:fixed;bottom:80px;right:16px;width:52px;height:52px;border-radius:16px;background:#0ea5e9;border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 20px #0ea5e966;z-index:50;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .fab:active{transform:scale(.93)}
+    .section-title{font-size:13px;font-weight:600;color:#64748b;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+    .pill{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
   </style>
 </head>
 <body>
 
-<!-- HOME -->
+<!-- ==================== HOME ==================== -->
 <div id="page-home" class="page active">
-  <div style="padding:20px 20px 0">
+  <div style="padding:4px 0 0">
     <p style="color:#64748b;font-size:13px">Добро пожаловать</p>
-    <h1 style="font-size:28px;font-weight:700;letter-spacing:-.5px;margin:4px 0 20px">DentAssist <span style="color:#38bdf8">Pro</span></h1>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-      <div class="stat-card">
-        <div style="font-size:24px;margin-bottom:4px">🦷</div>
-        <div id="stat-teeth" style="font-size:26px;font-weight:700;color:#38bdf8">0</div>
-        <div style="font-size:11px;color:#64748b;margin-top:2px">Зубов отмечено</div>
-      </div>
-      <div class="stat-card">
-        <div style="font-size:24px;margin-bottom:4px">💊</div>
-        <div style="font-size:26px;font-weight:700;color:#38bdf8">17</div>
-        <div style="font-size:11px;color:#64748b;margin-top:2px">Препаратов в базе</div>
-      </div>
+    <h1 style="font-size:26px;font-weight:700;letter-spacing:-.5px;margin:2px 0 18px">DentAssist <span style="color:#38bdf8">Pro</span></h1>
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="stat-mini"><div style="font-size:22px">👤</div><div id="stat-patients" style="font-size:22px;font-weight:700;color:#38bdf8">0</div><div style="font-size:10px;color:#64748b">Пациентов</div></div>
+      <div class="stat-mini"><div style="font-size:22px">📋</div><div id="stat-plans" style="font-size:22px;font-weight:700;color:#a78bfa">0</div><div style="font-size:10px;color:#64748b">Планов лечения</div></div>
     </div>
-    <button class="menu-btn" onclick="showPage('odonto')">
-      <div class="menu-icon-wrap" style="background:#0ea5e922;border:1px solid #0ea5e944">🦷</div>
-      <div><div style="font-weight:600;font-size:16px;color:#f1f5f9">Одонтограмма</div><div style="font-size:13px;color:#64748b;margin-top:2px">Интерактивная формула зубов</div></div>
+
+    <div class="section-title">Инструменты</div>
+    <button class="patient-card" onclick="showPage('patients')" style="display:flex;align-items:center;gap:14px;width:100%">
+      <div class="avatar" style="background:#0ea5e922;border:1px solid #0ea5e944">👤</div>
+      <div><div style="font-weight:600;font-size:15px">Пациенты</div><div style="font-size:12px;color:#64748b;margin-top:2px">Карточки и история лечения</div></div>
       <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
     </button>
-    <button class="menu-btn" onclick="showPage('drugs')">
-      <div class="menu-icon-wrap" style="background:#8b5cf622;border:1px solid #8b5cf644">💊</div>
-      <div><div style="font-weight:600;font-size:16px;color:#f1f5f9">Справочник препаратов</div><div style="font-size:13px;color:#64748b;margin-top:2px">Дозировки и показания</div></div>
+    <button class="patient-card" onclick="showPage('odonto')" style="display:flex;align-items:center;gap:14px;width:100%">
+      <div class="avatar" style="background:#22c55e22;border:1px solid #22c55e44">🦷</div>
+      <div><div style="font-weight:600;font-size:15px">Одонтограмма</div><div style="font-size:12px;color:#64748b;margin-top:2px">Интерактивная формула зубов</div></div>
       <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
     </button>
-    <div class="card">
-      <div class="label">Условные обозначения</div>
-      <div id="legend"></div>
-    </div>
+    <button class="patient-card" onclick="showPage('drugs')" style="display:flex;align-items:center;gap:14px;width:100%">
+      <div class="avatar" style="background:#f59e0b22;border:1px solid #f59e0b44">💊</div>
+      <div><div style="font-weight:600;font-size:15px">Препараты</div><div style="font-size:12px;color:#64748b;margin-top:2px">Справочник и дозировки</div></div>
+      <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
+    </button>
+    <button class="patient-card" onclick="showPage('calc')" style="display:flex;align-items:center;gap:14px;width:100%">
+      <div class="avatar" style="background:#ef444422;border:1px solid #ef444444">🧮</div>
+      <div><div style="font-weight:600;font-size:15px">Калькулятор доз</div><div style="font-size:12px;color:#64748b;margin-top:2px">Расчёт по весу пациента</div></div>
+      <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
+    </button>
+    <button class="patient-card" onclick="showPage('mkb')" style="display:flex;align-items:center;gap:14px;width:100%">
+      <div class="avatar" style="background:#8b5cf622;border:1px solid #8b5cf644">📖</div>
+      <div><div style="font-weight:600;font-size:15px">МКБ-10</div><div style="font-size:12px;color:#64748b;margin-top:2px">Стоматологические диагнозы</div></div>
+      <div style="margin-left:auto;color:#334155;font-size:20px">›</div>
+    </button>
   </div>
 </div>
 
-<!-- ODONTOGRAM -->
+<!-- ==================== PATIENTS ==================== -->
+<div id="page-patients" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('home')">‹</button>
+    <h2>Пациенты</h2>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="patient-search" placeholder="Поиск пациента..." oninput="renderPatients()"/>
+  </div>
+  <div id="patient-list"></div>
+  <button class="fab" onclick="openPatientModal()">+</button>
+</div>
+
+<!-- ==================== PATIENT DETAIL ==================== -->
+<div id="page-patient-detail" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('patients')">‹</button>
+    <h2 id="detail-name">Пациент</h2>
+    <button class="btn btn-danger" style="margin-left:auto;padding:6px 10px;font-size:12px" onclick="deletePatient()">Удалить</button>
+  </div>
+  <div id="detail-content"></div>
+</div>
+
+<!-- ==================== ODONTO ==================== -->
 <div id="page-odonto" class="page">
   <div class="row-header">
     <button class="btn back-btn" onclick="showPage('home')">‹</button>
     <h2>Одонтограмма</h2>
   </div>
   <div class="card">
-    <div class="label">Выберите состояние</div>
-    <div id="cond-btns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    <div class="label">Состояние</div>
+    <div id="cond-btns" style="display:flex;flex-wrap:wrap;gap:5px"></div>
   </div>
   <div class="card">
     <div class="label">Верхняя челюсть</div>
@@ -99,18 +157,18 @@
     <div class="label">Нижняя челюсть</div>
     <div class="teeth-row" id="lower-teeth"></div>
   </div>
-  <div class="card" id="summary-card" style="display:none">
+  <div class="card" id="odonto-summary" style="display:none">
     <div class="label">Отмеченные зубы</div>
-    <div id="summary-tags"></div>
-    <button class="btn" style="margin-top:12px;color:#ef4444;border-color:#ef444433" onclick="resetTeeth()">Сбросить всё</button>
+    <div id="odonto-tags"></div>
+    <button class="btn btn-danger" style="margin-top:10px;font-size:12px" onclick="resetOdonto()">Сбросить</button>
   </div>
 </div>
 
-<!-- DRUGS -->
+<!-- ==================== DRUGS ==================== -->
 <div id="page-drugs" class="page">
   <div class="row-header">
     <button class="btn back-btn" onclick="showPage('home')">‹</button>
-    <h2>Справочник препаратов</h2>
+    <h2>Препараты</h2>
   </div>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
@@ -120,14 +178,93 @@
   <div id="drug-list"></div>
 </div>
 
+<!-- ==================== CALC ==================== -->
+<div id="page-calc" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('home')">‹</button>
+    <h2>Калькулятор доз</h2>
+  </div>
+  <div class="card">
+    <div class="form-row">
+      <label class="form-label">Вес пациента (кг)</label>
+      <input type="number" id="calc-weight" placeholder="Например: 70" oninput="calcDose()"/>
+    </div>
+    <div class="form-row" style="margin-bottom:0">
+      <label class="form-label">Возраст</label>
+      <div style="display:flex;gap:8px">
+        <button class="cat-btn active" id="age-adult" onclick="setAge('adult')">Взрослый</button>
+        <button class="cat-btn" id="age-child" onclick="setAge('child')">Ребёнок (&lt;12 лет)</button>
+      </div>
+    </div>
+  </div>
+  <div class="label">Препарат</div>
+  <div id="calc-drug-btns" style="display:flex;flex-wrap:wrap;margin-bottom:4px"></div>
+  <div id="calc-result"></div>
+</div>
+
+<!-- ==================== MKB ==================== -->
+<div id="page-mkb" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('home')">‹</button>
+    <h2>МКБ-10</h2>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="mkb-search" placeholder="Поиск диагноза..." oninput="renderMKB()"/>
+  </div>
+  <div class="cats" id="mkb-cats"></div>
+  <div id="mkb-list"></div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Patient Modal -->
+<div class="modal-overlay" id="patient-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="patient-modal-title" style="margin-bottom:16px">Новый пациент</h3>
+    <div class="form-row"><label class="form-label">ФИО *</label><input id="p-name" placeholder="Иванов Иван Иванович"/></div>
+    <div class="grid2">
+      <div class="form-row"><label class="form-label">Дата рождения</label><input id="p-dob" type="date"/></div>
+      <div class="form-row"><label class="form-label">Телефон</label><input id="p-phone" placeholder="+7 999 000 00 00"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">Аллергии</label><input id="p-allergy" placeholder="Лидокаин, пенициллин..."/></div>
+    <div class="form-row"><label class="form-label">Жалобы / Анамнез</label><textarea id="p-complaints" rows="3" placeholder="Боль при жевании..."></textarea></div>
+    <div class="form-row"><label class="form-label">Диагноз (МКБ-10)</label><input id="p-diagnosis" placeholder="K02.1 Кариес дентина..."/></div>
+    <div class="form-row"><label class="form-label">Заметки врача</label><textarea id="p-notes" rows="2" placeholder="Дополнительные заметки..."></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn" style="flex:1" onclick="closeModal('patient-modal')">Отмена</button>
+      <button class="btn btn-primary" style="flex:2" onclick="savePatient()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Treatment Plan Modal -->
+<div class="modal-overlay" id="plan-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 style="margin-bottom:16px">Добавить процедуру</h3>
+    <div class="form-row"><label class="form-label">Процедура *</label><input id="plan-proc" placeholder="Лечение кариеса зуба 26"/></div>
+    <div class="form-row"><label class="form-label">Зуб</label><input id="plan-tooth" placeholder="26"/></div>
+    <div class="form-row"><label class="form-label">Стоимость (₽)</label><input id="plan-cost" type="number" placeholder="3000"/></div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn" style="flex:1" onclick="closeModal('plan-modal')">Отмена</button>
+      <button class="btn btn-primary" style="flex:2" onclick="savePlan()">Добавить</button>
+    </div>
+  </div>
+</div>
+
 <!-- Bottom Nav -->
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-home" onclick="showPage('home')"><span class="nav-icon">🏠</span>Главная</button>
+  <button class="nav-btn" id="nav-patients" onclick="showPage('patients')"><span class="nav-icon">👤</span>Пациенты</button>
   <button class="nav-btn" id="nav-odonto" onclick="showPage('odonto')"><span class="nav-icon">🦷</span>Зубы</button>
   <button class="nav-btn" id="nav-drugs" onclick="showPage('drugs')"><span class="nav-icon">💊</span>Препараты</button>
+  <button class="nav-btn" id="nav-calc" onclick="showPage('calc')"><span class="nav-icon">🧮</span>Дозы</button>
 </div>
 
 <script>
+// ============ DATA ============
 const CONDITIONS = [
   {code:"H",label:"Здоров",color:"#22c55e"},
   {code:"K",label:"Кариес",color:"#f59e0b"},
@@ -152,7 +289,7 @@ const DRUGS = [
     {name:"Метронидазол",dose:"500 мг × 3 р/сут",note:"Часто в комбинации с амоксициллином"},
     {name:"Клиндамицин",dose:"300 мг × 4 р/сут",note:"Резервный, при тяжёлых инфекциях"},
   ]},
-  {cat:"НПВС / Анальгетики",icon:"🩹",items:[
+  {cat:"НПВС",icon:"🩹",items:[
     {name:"Ибупрофен",dose:"400–600 мг × 3 р/сут",note:"После еды. Мax 2400 мг/сут"},
     {name:"Кеторолак",dose:"10 мг × 3–4 р/сут",note:"Не более 5 дней. Мощный анальгетик"},
     {name:"Нимесулид",dose:"100 мг × 2 р/сут",note:"После еды. Мax 200 мг/сут"},
@@ -166,215 +303,553 @@ const DRUGS = [
   {cat:"Гемостатики",icon:"🔴",items:[
     {name:"Капрофер",dose:"Местно на тампон",note:"Химическая коагуляция"},
     {name:"Адреналин 0.1%",dose:"Местно на тампон (1–2 кап)",note:"Вазоконстрикция, кратковременно"},
-    {name:"Альвожил / Альвостаз",dose:"Заполнить лунку",note:"При альвеолите"},
+    {name:"Альвожил",dose:"Заполнить лунку",note:"При альвеолите"},
+  ]},
+];
+
+const CALC_DRUGS = [
+  {name:"Артикаин",maxMg:7,concPct:4,carpMl:1.7,mgPerCarp:68},
+  {name:"Лидокаин 2%",maxMg:4.4,concPct:2,carpMl:1.8,mgPerCarp:36},
+  {name:"Мепивакаин 3%",maxMg:6.6,concPct:3,carpMl:1.7,mgPerCarp:51},
+  {name:"Ибупрофен",maxMg:40,unit:"мг/кг/сут",perDose:3,tabMg:400},
+  {name:"Парацетамол",maxMg:15,unit:"мг/кг разово",perDose:4,tabMg:500},
+  {name:"Амоксициллин",maxMg:50,unit:"мг/кг/сут",perDose:3,tabMg:500},
+];
+
+const MKB = [
+  {cat:"Кариес",items:[
+    {code:"K02.0",name:"Кариес эмали",desc:"Стадия мелового пятна, начальный кариес"},
+    {code:"K02.1",name:"Кариес дентина",desc:"Кариес с поражением дентина"},
+    {code:"K02.2",name:"Кариес цемента",desc:"Кариес корня зуба"},
+    {code:"K02.3",name:"Приостановившийся кариес",desc:"Активность кариозного процесса прекратилась"},
+    {code:"K02.8",name:"Другой уточнённый кариес",desc:""},
+    {code:"K02.9",name:"Кариес зубов неуточнённый",desc:""},
+  ]},
+  {cat:"Пульпит",items:[
+    {code:"K04.0",name:"Пульпит",desc:"Воспаление пульпы зуба"},
+    {code:"K04.01",name:"Начальный пульпит",desc:"Гиперемия пульпы"},
+    {code:"K04.02",name:"Острый пульпит",desc:"Острое воспаление пульпы"},
+    {code:"K04.04",name:"Хронический пульпит",desc:"Хроническое воспаление пульпы"},
+    {code:"K04.1",name:"Некроз пульпы",desc:"Гангрена пульпы"},
+    {code:"K04.2",name:"Дегенерация пульпы",desc:"Дентикли, петрификация пульпы"},
+  ]},
+  {cat:"Периодонтит",items:[
+    {code:"K04.4",name:"Острый апикальный периодонтит",desc:"Острое воспаление у верхушки корня"},
+    {code:"K04.5",name:"Хронический апикальный периодонтит",desc:"Апикальная гранулёма"},
+    {code:"K04.6",name:"Периапикальный абсцесс с полостью",desc:"Абсцесс с свищём"},
+    {code:"K04.7",name:"Периапикальный абсцесс без полости",desc:"Абсцесс без свища"},
+    {code:"K04.8",name:"Корневая киста",desc:"Апикальная, боковая киста"},
+  ]},
+  {cat:"Пародонт",items:[
+    {code:"K05.0",name:"Острый гингивит",desc:"Острое воспаление дёсен"},
+    {code:"K05.1",name:"Хронический гингивит",desc:"Хроническое воспаление дёсен"},
+    {code:"K05.2",name:"Острый пародонтит",desc:"Острое воспаление пародонта"},
+    {code:"K05.3",name:"Хронический пародонтит",desc:"Хроническое воспаление пародонта"},
+    {code:"K05.4",name:"Пародонтоз",desc:"Невоспалительное поражение пародонта"},
+    {code:"K05.5",name:"Другие болезни пародонта",desc:""},
+  ]},
+  {cat:"Удаление зубов",items:[
+    {code:"K08.1",name:"Потеря зубов вследствие несчастного случая",desc:"Травматическая потеря зуба"},
+    {code:"K08.2",name:"Атрофия беззубого альвеолярного края",desc:""},
+    {code:"K08.3",name:"Задержавшийся корень зуба",desc:"Retained dental root"},
+    {code:"Z98.811",name:"Состояние после удаления зуба",desc:"Послеоперационное состояние"},
+  ]},
+  {cat:"Другие",items:[
+    {code:"K07.0",name:"Аномалии размеров челюстей",desc:"Макрогнатия, микрогнатия"},
+    {code:"K07.3",name:"Аномалии положения зубов",desc:"Скученность, диастема, транспозиция"},
+    {code:"K08.0",name:"Потеря зубов вследствие болезней",desc:""},
+    {code:"K09.0",name:"Зубосодержащие кисты",desc:"Фолликулярная киста"},
+    {code:"K12.0",name:"Рецидивирующие афты",desc:"Афтозный стоматит"},
+    {code:"K12.1",name:"Другие формы стоматита",desc:"Протезный стоматит, хейлит"},
   ]},
 ];
 
 const UPPER = [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28];
 const LOWER = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
 
+// ============ STATE ============
+let patients = JSON.parse(localStorage.getItem('patients')||'[]');
 let toothStates = {};
 let selectedTooth = null;
 let selectedCond = CONDITIONS[0];
 let activeDrug = null;
-let activeCat = "Анестетики";
+let activeDrugCat = "Анестетики";
+let activeMKBCat = "Кариес";
+let activeCalcDrug = CALC_DRUGS[0];
+let isAdult = true;
+let editingPatientId = null;
+let currentPatientId = null;
 
+// ============ NAV ============
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('nav-' + id).classList.add('active');
-  if (id === 'home') updateStats();
+  const navEl = document.getElementById('nav-'+id);
+  if (navEl) navEl.classList.add('active');
+  if (id==='home') updateHomeStats();
+  if (id==='patients') renderPatients();
+  if (id==='odonto') { renderCondBtns(); renderTeeth(); }
+  if (id==='drugs') { renderDrugCats(); renderDrugs(); }
+  if (id==='calc') { renderCalcDrugs(); calcDose(); }
+  if (id==='mkb') { renderMKBCats(); renderMKB(); }
 }
 
-function updateStats() {
-  document.getElementById('stat-teeth').textContent = Object.keys(toothStates).length;
+// ============ HOME ============
+function updateHomeStats() {
+  document.getElementById('stat-patients').textContent = patients.length;
+  const plans = patients.reduce((a,p) => a + (p.plans||[]).length, 0);
+  document.getElementById('stat-plans').textContent = plans;
 }
 
-function renderLegend() {
-  const el = document.getElementById('legend');
-  el.innerHTML = CONDITIONS.map(c =>
-    `<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;margin:3px">
-      <span style="width:10px;height:10px;border-radius:3px;background:${c.color};display:inline-block"></span>
-      <span style="color:#94a3b8">${c.code} — ${c.label}</span>
-    </span>`
-  ).join('');
+// ============ PATIENTS ============
+function openPatientModal(id) {
+  editingPatientId = id || null;
+  document.getElementById('patient-modal-title').textContent = id ? 'Редактировать' : 'Новый пациент';
+  if (id) {
+    const p = patients.find(x => x.id===id);
+    document.getElementById('p-name').value = p.name||'';
+    document.getElementById('p-dob').value = p.dob||'';
+    document.getElementById('p-phone').value = p.phone||'';
+    document.getElementById('p-allergy').value = p.allergy||'';
+    document.getElementById('p-complaints').value = p.complaints||'';
+    document.getElementById('p-diagnosis').value = p.diagnosis||'';
+    document.getElementById('p-notes').value = p.notes||'';
+  } else {
+    ['p-name','p-dob','p-phone','p-allergy','p-complaints','p-diagnosis','p-notes'].forEach(id => document.getElementById(id).value='');
+  }
+  document.getElementById('patient-modal').classList.add('open');
 }
 
+function savePatient() {
+  const name = document.getElementById('p-name').value.trim();
+  if (!name) { alert('Введите ФИО'); return; }
+  const data = {
+    id: editingPatientId || Date.now().toString(),
+    name,
+    dob: document.getElementById('p-dob').value,
+    phone: document.getElementById('p-phone').value,
+    allergy: document.getElementById('p-allergy').value,
+    complaints: document.getElementById('p-complaints').value,
+    diagnosis: document.getElementById('p-diagnosis').value,
+    notes: document.getElementById('p-notes').value,
+    plans: editingPatientId ? (patients.find(p=>p.id===editingPatientId)||{}).plans||[] : [],
+    visits: editingPatientId ? (patients.find(p=>p.id===editingPatientId)||{}).visits||[] : [],
+    createdAt: editingPatientId ? (patients.find(p=>p.id===editingPatientId)||{}).createdAt : new Date().toISOString(),
+  };
+  if (editingPatientId) {
+    patients = patients.map(p => p.id===editingPatientId ? data : p);
+  } else {
+    patients.push(data);
+  }
+  savePatients();
+  closeModal('patient-modal');
+  renderPatients();
+}
+
+function deletePatient() {
+  if (!confirm('Удалить пациента?')) return;
+  patients = patients.filter(p => p.id !== currentPatientId);
+  savePatients();
+  showPage('patients');
+}
+
+function savePatients() {
+  localStorage.setItem('patients', JSON.stringify(patients));
+  updateHomeStats();
+}
+
+function renderPatients() {
+  const q = (document.getElementById('patient-search')||{}).value||'';
+  const el = document.getElementById('patient-list');
+  let list = patients.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">👤</div><div>Пациентов нет</div><div style="font-size:12px;margin-top:4px">Нажмите + чтобы добавить</div></div>`;
+    return;
+  }
+  el.innerHTML = list.map(p => {
+    const age = p.dob ? Math.floor((Date.now()-new Date(p.dob))/(365.25*24*3600*1000)) : null;
+    const allergyBadge = p.allergy ? `<span class="pill" style="background:#ef444422;color:#ef4444;border:1px solid #ef444433">${p.allergy}</span>` : '';
+    return `<div class="patient-card" onclick="openPatientDetail('${p.id}')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="avatar" style="background:#0ea5e922;border:1px solid #0ea5e944;font-size:16px">👤</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:15px">${p.name}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px">${age ? age+' лет' : ''}${p.phone ? ' · '+p.phone : ''}</div>
+          ${allergyBadge ? `<div style="margin-top:4px">${allergyBadge}</div>` : ''}
+        </div>
+        <div style="color:#334155;font-size:20px">›</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openPatientDetail(id) {
+  currentPatientId = id;
+  const p = patients.find(x => x.id===id);
+  document.getElementById('detail-name').textContent = p.name;
+  const age = p.dob ? Math.floor((Date.now()-new Date(p.dob))/(365.25*24*3600*1000)) : null;
+  const plans = p.plans||[];
+  const totalCost = plans.reduce((a,pl) => a+(parseInt(pl.cost)||0), 0);
+  const doneCost = plans.filter(pl=>pl.done).reduce((a,pl) => a+(parseInt(pl.cost)||0), 0);
+
+  document.getElementById('detail-content').innerHTML = `
+    <!-- Info -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:18px;font-weight:700">${p.name}</div>
+          ${age ? `<div style="color:#64748b;font-size:13px;margin-top:2px">${age} лет${p.dob?' · '+new Date(p.dob).toLocaleDateString('ru'):''}</div>` : ''}
+          ${p.phone ? `<div style="color:#64748b;font-size:13px;margin-top:1px">📞 ${p.phone}</div>` : ''}
+        </div>
+        <button class="btn" style="font-size:12px;padding:6px 10px" onclick="openPatientModal('${p.id}')">✏️ Изменить</button>
+      </div>
+      ${p.allergy ? `<div style="margin-top:10px;padding:8px 10px;background:#ef444411;border-radius:8px;border:1px solid #ef444433;font-size:13px;color:#ef4444">⚠️ Аллергия: ${p.allergy}</div>` : ''}
+    </div>
+
+    ${p.complaints||p.diagnosis ? `
+    <div class="card">
+      ${p.diagnosis ? `<div style="margin-bottom:${p.complaints?'10px':'0'}"><div class="label">Диагноз</div><div style="font-size:14px">${p.diagnosis}</div></div>` : ''}
+      ${p.complaints ? `<div><div class="label">Жалобы / Анамнез</div><div style="font-size:14px;color:#94a3b8;line-height:1.5">${p.complaints}</div></div>` : ''}
+    </div>` : ''}
+
+    ${p.notes ? `<div class="card"><div class="label">Заметки врача</div><div style="font-size:14px;color:#94a3b8;line-height:1.5">${p.notes}</div></div>` : ''}
+
+    <!-- Treatment Plan -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div class="label" style="margin:0">План лечения</div>
+      <button class="btn btn-primary" style="font-size:12px;padding:5px 12px" onclick="openPlanModal('${p.id}')">+ Добавить</button>
+    </div>
+    ${plans.length ? `
+    <div class="card" style="padding:8px 14px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px">
+        <span>Выполнено ${plans.filter(pl=>pl.done).length}/${plans.length}</span>
+        <span>${doneCost.toLocaleString()} / ${totalCost.toLocaleString()} ₽</span>
+      </div>
+      ${plans.map((pl,i) => `
+        <div class="treatment-step">
+          <div class="step-check ${pl.done?'done':''}" onclick="togglePlan('${p.id}',${i})">${pl.done?'✓':''}</div>
+          <div style="flex:1">
+            <div style="font-size:14px;${pl.done?'text-decoration:line-through;color:#475569':''}">${pl.proc}</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px">${pl.tooth?'Зуб '+pl.tooth+' · ':''}${pl.cost?pl.cost.toLocaleString()+' ₽':''}</div>
+          </div>
+          <button onclick="deletePlan('${p.id}',${i})" style="background:none;border:none;color:#475569;cursor:pointer;font-size:16px;padding:0 4px">×</button>
+        </div>`).join('')}
+    </div>` : `<div class="card" style="text-align:center;color:#475569;font-size:13px;padding:20px">Нет процедур в плане</div>`}
+
+    <!-- Visit History -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px">
+      <div class="label" style="margin:0">История визитов</div>
+      <button class="btn" style="font-size:12px;padding:5px 12px" onclick="addVisit('${p.id}')">+ Визит</button>
+    </div>
+    ${(p.visits||[]).length ? `
+    <div class="card" style="padding:8px 14px">
+      ${(p.visits||[]).slice().reverse().map(v => `
+        <div style="padding:8px 0;border-bottom:1px solid #0f172a">
+          <div style="display:flex;justify-content:space-between">
+            <div style="font-size:13px;font-weight:600">${new Date(v.date).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</div>
+          </div>
+          <div style="font-size:13px;color:#94a3b8;margin-top:3px;line-height:1.4">${v.note}</div>
+        </div>`).join('')}
+    </div>` : `<div class="card" style="text-align:center;color:#475569;font-size:13px;padding:20px">Нет записей о визитах</div>`}
+  `;
+  showPage('patient-detail');
+}
+
+function openPlanModal(patientId) {
+  currentPatientId = patientId;
+  ['plan-proc','plan-tooth','plan-cost'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('plan-modal').classList.add('open');
+}
+
+function savePlan() {
+  const proc = document.getElementById('plan-proc').value.trim();
+  if (!proc) return;
+  const p = patients.find(x => x.id===currentPatientId);
+  if (!p.plans) p.plans = [];
+  p.plans.push({
+    proc,
+    tooth: document.getElementById('plan-tooth').value,
+    cost: document.getElementById('plan-cost').value,
+    done: false
+  });
+  savePatients();
+  closeModal('plan-modal');
+  openPatientDetail(currentPatientId);
+}
+
+function togglePlan(patientId, idx) {
+  const p = patients.find(x => x.id===patientId);
+  p.plans[idx].done = !p.plans[idx].done;
+  savePatients();
+  openPatientDetail(patientId);
+}
+
+function deletePlan(patientId, idx) {
+  const p = patients.find(x => x.id===patientId);
+  p.plans.splice(idx, 1);
+  savePatients();
+  openPatientDetail(patientId);
+}
+
+function addVisit(patientId) {
+  const note = prompt('Что было сделано на этом визите?');
+  if (!note) return;
+  const p = patients.find(x => x.id===patientId);
+  if (!p.visits) p.visits = [];
+  p.visits.push({ date: new Date().toISOString(), note });
+  savePatients();
+  openPatientDetail(patientId);
+}
+
+// ============ ODONTO ============
 function renderCondBtns() {
-  const el = document.getElementById('cond-btns');
-  el.innerHTML = CONDITIONS.map(c =>
-    `<button class="cond-btn" id="cb-${c.code}" onclick="selectCond('${c.code}')"
-      style="${selectedCond.code===c.code ? `background:${c.color};color:#fff;border-color:${c.color}` : ''}"
+  document.getElementById('cond-btns').innerHTML = CONDITIONS.map(c =>
+    `<button class="cond-btn" onclick="selectCond('${c.code}')"
+      style="${selectedCond.code===c.code?`background:${c.color};color:#fff;border-color:${c.color}`:''}"
     >${c.code} ${c.label}</button>`
   ).join('');
 }
 
 function selectCond(code) {
-  selectedCond = CONDITIONS.find(c => c.code === code);
-  renderCondBtns();
-  renderTeeth();
+  selectedCond = CONDITIONS.find(c => c.code===code);
+  renderCondBtns(); renderTeeth();
 }
 
 function renderTeeth() {
-  ['upper','lower'].forEach((jaw, ji) => {
-    const teeth = ji === 0 ? UPPER : LOWER;
-    const el = document.getElementById(jaw + '-teeth');
-    el.innerHTML = teeth.map(num => {
+  ['upper','lower'].forEach((jaw,ji) => {
+    const teeth = ji===0 ? UPPER : LOWER;
+    document.getElementById(jaw+'-teeth').innerHTML = teeth.map(num => {
       const st = toothStates[num];
-      const isSel = selectedTooth === num;
-      const bg = isSel ? selectedCond.color : (st ? st.color : '#e2e8f0');
-      const txt = st ? st.code : '';
-      const shadow = isSel ? `box-shadow:0 0 12px ${selectedCond.color}` : '';
-      const borderC = isSel ? 'white' : 'transparent';
-      return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0">
+      const isSel = selectedTooth===num;
+      const bg = isSel ? selectedCond.color : (st ? st.color : '#334155');
+      const shadow = isSel ? `box-shadow:0 0 10px ${selectedCond.color}` : '';
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0">
         <div class="tooth-num">${num}</div>
         <div class="tooth" onclick="clickTooth(${num})"
-          style="background:${bg};border-color:${borderC};${shadow};color:${(st||isSel)?'#fff':'#64748b'}"
-        >${txt}</div>
+          style="background:${bg};border-color:${isSel?'white':'transparent'};${shadow};color:${(st||isSel)?'#fff':'#64748b'}"
+        >${st?st.code:''}</div>
       </div>`;
     }).join('');
   });
 
-  // apply btn
-  let btn = document.getElementById('apply-btn');
+  let btn = document.getElementById('apply-tooth-btn');
   if (selectedTooth) {
     if (!btn) {
       btn = document.createElement('button');
-      btn.id = 'apply-btn';
-      btn.className = 'apply-btn';
-      btn.onclick = applyCondition;
+      btn.id = 'apply-tooth-btn';
+      btn.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;padding:13px;border-radius:14px;color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;z-index:50';
+      btn.onclick = applyTooth;
       document.body.appendChild(btn);
     }
     btn.style.background = selectedCond.color;
-    btn.style.boxShadow = `0 4px 20px ${selectedCond.color}66`;
-    btn.textContent = `Зуб ${selectedTooth}: отметить как «${selectedCond.label}»`;
-  } else {
-    if (btn) btn.remove();
-  }
-}
+    btn.textContent = `Зуб ${selectedTooth}: «${selectedCond.label}»`;
+  } else if (btn) btn.remove();
 
-function clickTooth(num) {
-  selectedTooth = selectedTooth === num ? null : num;
-  renderTeeth();
-}
-
-function applyCondition() {
-  if (!selectedTooth) return;
-  toothStates[selectedTooth] = selectedCond;
-  selectedTooth = null;
-  renderTeeth();
-  renderSummary();
-}
-
-function renderSummary() {
   const keys = Object.keys(toothStates);
-  const card = document.getElementById('summary-card');
-  const tags = document.getElementById('summary-tags');
-  if (keys.length === 0) { card.style.display = 'none'; return; }
-  card.style.display = 'block';
+  const sum = document.getElementById('odonto-summary');
+  const tags = document.getElementById('odonto-tags');
+  if (!keys.length) { sum.style.display='none'; return; }
+  sum.style.display='block';
   tags.innerHTML = keys.map(num => {
     const c = toothStates[num];
-    return `<span class="tag" style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44">${num}: ${c.label}</span>`;
+    return `<span class="tag" style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44">${num}:${c.code}</span>`;
   }).join('');
 }
 
-function resetTeeth() {
-  toothStates = {};
-  renderTeeth();
-  renderSummary();
-  updateStats();
-}
+function clickTooth(num) { selectedTooth = selectedTooth===num ? null : num; renderTeeth(); }
+function applyTooth() { if (!selectedTooth) return; toothStates[selectedTooth]=selectedCond; selectedTooth=null; renderTeeth(); }
+function resetOdonto() { toothStates={}; renderTeeth(); }
 
-function renderCatTabs() {
-  const el = document.getElementById('cat-tabs');
-  el.innerHTML = DRUGS.map(d =>
-    `<button class="cat-btn ${activeCat===d.cat?'active':''}" onclick="selectCat('${d.cat}')">${d.icon} ${d.cat}</button>`
+// ============ DRUGS ============
+function renderDrugCats() {
+  document.getElementById('cat-tabs').innerHTML = DRUGS.map(d =>
+    `<button class="cat-btn ${activeDrugCat===d.cat?'active':''}" onclick="selectDrugCat('${d.cat}')">${d.icon} ${d.cat}</button>`
   ).join('');
 }
 
-function selectCat(cat) {
-  activeCat = cat;
-  renderCatTabs();
-  renderDrugs();
-}
+function selectDrugCat(cat) { activeDrugCat=cat; renderDrugCats(); renderDrugs(); }
 
 function renderDrugs() {
-  const q = document.getElementById('drug-search').value.toLowerCase();
+  const q = (document.getElementById('drug-search')||{}).value||'';
   const tabs = document.getElementById('cat-tabs');
-  tabs.style.display = q ? 'none' : 'flex';
+  if (tabs) tabs.style.display = q ? 'none' : 'flex';
 
-  const el = document.getElementById('drug-list');
   let html = '';
   DRUGS.forEach(cat => {
-    const items = q ? cat.items.filter(d => d.name.toLowerCase().includes(q) || d.dose.toLowerCase().includes(q)) : (activeCat === cat.cat ? cat.items : []);
+    const items = q ? cat.items.filter(d=>d.name.toLowerCase().includes(q.toLowerCase())) : (activeDrugCat===cat.cat?cat.items:[]);
     if (!items.length) return;
     if (q) html += `<div class="label" style="margin-bottom:6px">${cat.icon} ${cat.cat}</div>`;
-    items.forEach((drug, i) => {
-      const key = cat.cat + i;
-      const open = activeDrug === key;
+    items.forEach((drug,i) => {
+      const key = cat.cat+i;
+      const open = activeDrug===key;
       html += `<div class="drug-item" onclick="toggleDrug('${key}')">
         <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div><div class="drug-name">${drug.name}</div><div class="drug-dose">${drug.dose}</div></div>
+          <div><div style="font-weight:600;font-size:14px">${drug.name}</div><div style="font-size:13px;color:#38bdf8;margin-top:3px">${drug.dose}</div></div>
           <span style="color:#475569">${open?'▲':'▼'}</span>
         </div>
-        ${open ? `<div class="drug-note">📝 ${drug.note}</div>` : ''}
+        ${open?`<div style="margin-top:10px;padding:10px;background:#0f172a;border-radius:8px;font-size:13px;color:#94a3b8;line-height:1.5">📝 ${drug.note}</div>`:''}
       </div>`;
     });
   });
+  document.getElementById('drug-list').innerHTML = html;
+}
+
+function toggleDrug(key) { activeDrug = activeDrug===key ? null : key; renderDrugs(); }
+
+// ============ CALC ============
+let calcDrugIdx = 0;
+
+function renderCalcDrugs() {
+  document.getElementById('calc-drug-btns').innerHTML = CALC_DRUGS.map((d,i) =>
+    `<button class="calc-drug-btn ${calcDrugIdx===i?'active':''}" onclick="setCalcDrug(${i})">${d.name}</button>`
+  ).join('');
+}
+
+function setCalcDrug(i) { calcDrugIdx=i; renderCalcDrugs(); calcDose(); }
+function setAge(type) {
+  isAdult = type==='adult';
+  document.getElementById('age-adult').className = 'cat-btn'+(isAdult?' active':'');
+  document.getElementById('age-child').className = 'cat-btn'+(!isAdult?' active':'');
+  calcDose();
+}
+
+function calcDose() {
+  const w = parseFloat(document.getElementById('calc-weight').value);
+  const d = CALC_DRUGS[calcDrugIdx];
+  const el = document.getElementById('calc-result');
+  if (!w || w<=0) { el.innerHTML=''; return; }
+
+  const coef = isAdult ? 1 : 0.5;
+  let html = '';
+
+  if (d.carpMl) {
+    // Anesthetic
+    const maxMg = d.maxMg * w * coef;
+    const maxCarps = Math.floor(maxMg / d.mgPerCarp * 10) / 10;
+    const recCarps = Math.min(maxCarps, isAdult ? 4 : 2);
+    html = `<div class="calc-result">
+      <div class="label">Результат для ${d.name}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="text-align:center">
+          <div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс. доза</div>
+          <div style="font-size:22px;font-weight:700;color:#38bdf8">${Math.round(maxMg)}<span style="font-size:13px;color:#64748b"> мг</span></div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс. карпул</div>
+          <div style="font-size:22px;font-weight:700;color:#22c55e">${maxCarps}<span style="font-size:13px;color:#64748b"> карп.</span></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#22c55e11;border-radius:8px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center">
+        ✅ Рекомендуется: <b>${recCarps} карп.</b> (${Math.round(recCarps*d.mgPerCarp)} мг)
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#475569">
+        Расчёт: ${d.maxMg} мг/кг × ${w} кг${!isAdult?' × 0.5 (ребёнок)':''} = ${Math.round(maxMg)} мг ÷ ${d.mgPerCarp} мг/карп = ${maxCarps} карп.
+      </div>
+    </div>`;
+  } else {
+    // Tablet drug
+    const maxMgDay = d.maxMg * w * coef;
+    const perDose = Math.round(maxMgDay / d.perDose);
+    const tabs = Math.round(perDose / d.tabMg * 10) / 10;
+    html = `<div class="calc-result">
+      <div class="label">Результат для ${d.name}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="text-align:center">
+          <div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс. в сутки</div>
+          <div style="font-size:22px;font-weight:700;color:#38bdf8">${Math.round(maxMgDay)}<span style="font-size:13px;color:#64748b"> мг</span></div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:#64748b;margin-bottom:4px">Разовая доза</div>
+          <div style="font-size:22px;font-weight:700;color:#22c55e">${perDose}<span style="font-size:13px;color:#64748b"> мг</span></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#22c55e11;border-radius:8px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center">
+        ✅ По <b>${tabs} табл. ${d.tabMg}мг</b> × ${d.perDose} р/сут
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#475569">
+        Расчёт: ${d.maxMg} ${d.unit} × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxMgDay)} мг/сут ÷ ${d.perDose} = ${perDose} мг/приём
+      </div>
+    </div>`;
+  }
   el.innerHTML = html;
 }
 
-function toggleDrug(key) {
-  activeDrug = activeDrug === key ? null : key;
-  renderDrugs();
+// ============ MKB ============
+function renderMKBCats() {
+  document.getElementById('mkb-cats').innerHTML = MKB.map(m =>
+    `<button class="cat-btn ${activeMKBCat===m.cat?'active':''}" onclick="selectMKBCat('${m.cat}')">${m.cat}</button>`
+  ).join('');
+}
+
+function selectMKBCat(cat) { activeMKBCat=cat; renderMKBCats(); renderMKB(); }
+
+function renderMKB() {
+  const q = (document.getElementById('mkb-search')||{}).value||'';
+  const tabs = document.getElementById('mkb-cats');
+  if (tabs) tabs.style.display = q ? 'none' : 'flex';
+
+  let html = '';
+  MKB.forEach(cat => {
+    const items = q ? cat.items.filter(d=>
+      d.code.toLowerCase().includes(q.toLowerCase()) ||
+      d.name.toLowerCase().includes(q.toLowerCase()) ||
+      d.desc.toLowerCase().includes(q.toLowerCase())
+    ) : (activeMKBCat===cat.cat?cat.items:[]);
+    if (!items.length) return;
+    if (q) html += `<div class="label" style="margin-bottom:6px">${cat.cat}</div>`;
+    items.forEach(item => {
+      html += `<div class="mkb-item" onclick="copyMKB('${item.code}','${item.name}')">
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <span style="background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf633;padding:3px 7px;border-radius:6px;font-size:12px;font-weight:700;flex-shrink:0">${item.code}</span>
+          <div>
+            <div style="font-weight:600;font-size:14px">${item.name}</div>
+            ${item.desc?`<div style="font-size:12px;color:#64748b;margin-top:2px">${item.desc}</div>`:''}
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('mkb-list').innerHTML = html || `<div class="empty"><div>Ничего не найдено</div></div>`;
+}
+
+function copyMKB(code, name) {
+  const text = `${code} ${name}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast(`Скопировано: ${text}`));
+  } else showToast(`${text}`);
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t=document.createElement('div'); t.id='toast'; t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#334155;color:#f1f5f9;padding:10px 16px;border-radius:10px;font-size:13px;z-index:300;white-space:nowrap;pointer-events:none'; document.body.appendChild(t); }
+  t.textContent=msg; t.style.opacity=1;
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.style.opacity=0,2000);
+}
+
+// ============ MODAL ============
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); }));
+
+// ============ PWA ============
+(function(){
+  const manifest = {name:"DentAssist Pro",short_name:"DentAssist",start_url:"./",display:"standalone",background_color:"#0f172a",theme_color:"#0f172a",orientation:"portrait",
+    icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230f172a'/%3E%3Crect x='24' y='24' width='144' height='144' rx='30' fill='%231e293b'/%3E%3Ccircle cx='96' cy='100' r='38' fill='%23f8fafc'/%3E%3Ccircle cx='96' cy='115' r='12' fill='%2338bdf8'/%3E%3C/svg%3E",sizes:"192x192",type:"image/svg+xml",purpose:"any maskable"}]
+  };
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const link=document.createElement('link'); link.rel='manifest'; link.href=URL.createObjectURL(blob);
+  document.head.appendChild(link);
+})();
+
+if('serviceWorker' in navigator){
+  const sw=`const C='dental-v2';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.add('/'))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+  const blob=new Blob([sw],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
 }
 
 // Init
-renderLegend();
-renderCondBtns();
-renderTeeth();
-renderCatTabs();
-renderDrugs();
-
-// PWA Service Worker
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE='dental-v1';
-    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.add('/'))));
-    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(()=>{});
-}
-</script>
-
-<!-- Inline manifest via JS for guaranteed PWA detection -->
-<script>
-(function(){
-  const manifest = {
-    name: "DentAssist Pro — Помощник стоматолога",
-    short_name: "DentAssist",
-    start_url: "./",
-    display: "standalone",
-    background_color: "#0f172a",
-    theme_color: "#0f172a",
-    orientation: "portrait",
-    icons: [{
-      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230f172a'/%3E%3Ctext y='130' x='30' font-size='120'%3E🦷%3C/text%3E%3C/svg%3E",
-      sizes: "192x192",
-      type: "image/svg+xml",
-      purpose: "any maskable"
-    }]
-  };
-  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('link');
-  link.rel = 'manifest';
-  link.href = url;
-  document.head.appendChild(link);
-})();
+updateHomeStats();
 </script>
 </body>
 </html>
