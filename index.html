@@ -3,108 +3,170 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<meta name="theme-color" content="#0f172a"/>
+<meta name="theme-color" id="meta-theme-color" content="#0f172a"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="DentAssist"/>
 <title>DentAssist Pro 3.0</title>
+<script>
+// Apply theme immediately before render to prevent flash
+(function(){
+  if(localStorage.getItem('da_theme')==='light'){
+    document.documentElement.classList.add('light');
+  }
+})();
+</script>
 <style>
+/* ===== CSS VARIABLES / THEMES ===== */
+:root{
+  --bg:#0f172a;
+  --bg2:#1e293b;
+  --bg3:#0d1526;
+  --border:#334155;
+  --border2:#253347;
+  --text:#f1f5f9;
+  --text2:#cbd5e1;
+  --text3:#94a3b8;
+  --text4:#64748b;
+  --text5:#475569;
+  --accent:#0ea5e9;
+  --accent2:#38bdf8;
+  --shadow:#0ea5e966;
+  --nav-bg:#1e293b;
+  --input-bg:#0d1526;
+  --modal-bg:#1e293b;
+  --card-bg:#1e293b;
+  --overlay:#00000099;
+  --handle:#334155;
+}
+html.light{
+  --bg:#f0f4f8;
+  --bg2:#ffffff;
+  --bg3:#e2e8f0;
+  --border:#d1d9e0;
+  --border2:#cbd5e1;
+  --text:#0f172a;
+  --text2:#1e293b;
+  --text3:#334155;
+  --text4:#475569;
+  --text5:#64748b;
+  --accent:#0284c7;
+  --accent2:#0369a1;
+  --shadow:#0284c733;
+  --nav-bg:#ffffff;
+  --input-bg:#f8fafc;
+  --modal-bg:#ffffff;
+  --card-bg:#ffffff;
+  --overlay:#00000055;
+  --handle:#cbd5e1;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;transition:background .2s,color .2s}
 .page{display:none;padding:16px 16px 95px;animation:fadeIn .2s ease}
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.card{background:#1e293b;border-radius:16px;padding:14px;border:1px solid #334155;margin-bottom:12px}
-.btn{background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:14px;padding:8px 14px;transition:all .15s;font-family:inherit}
+
+.card{background:var(--card-bg);border-radius:16px;padding:14px;border:1px solid var(--border);margin-bottom:12px;transition:background .2s,border-color .2s}
+.btn{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--text3);cursor:pointer;font-size:14px;padding:8px 14px;transition:all .15s;font-family:inherit}
 .btn:active{opacity:.7}
-.btn-primary{background:#0ea5e9;border-color:#0ea5e9;color:#fff;font-weight:600}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .btn-success{background:#22c55e;border-color:#22c55e;color:#fff;font-weight:600}
 .btn-danger{background:#ef444422;border-color:#ef444444;color:#ef4444}
 .btn-purple{background:#8b5cf6;border-color:#8b5cf6;color:#fff;font-weight:600}
 .btn-orange{background:#f97316;border-color:#f97316;color:#fff;font-weight:600}
 .back-btn{width:36px;height:36px;border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.label{font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-input,textarea,select{width:100%;padding:11px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none;font-family:inherit}
-input:focus,textarea:focus,select:focus{border-color:#0ea5e9}
-select option{background:#1e293b}
+.label{font-size:11px;color:var(--text4);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+input,textarea,select{width:100%;padding:11px 14px;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit;transition:background .2s,border-color .15s,color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select option{background:var(--card-bg);color:var(--text)}
 textarea{resize:none;line-height:1.5}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#1e293b;border-top:1px solid #334155;display:flex;padding:7px 0 16px;z-index:100}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;color:#475569;font-size:9px;font-weight:600;transition:color .15s;font-family:inherit}
-.nav-btn.active{color:#38bdf8}
+input::placeholder,textarea::placeholder{color:var(--text5)}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--nav-bg);border-top:1px solid var(--border);display:flex;padding:7px 0 16px;z-index:100;transition:background .2s}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;color:var(--text5);font-size:9px;font-weight:700;transition:color .15s;font-family:inherit}
+.nav-btn.active{color:var(--accent)}
 .nav-icon{font-size:19px}
 .row-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-h2{font-size:20px;font-weight:700;margin:0}
-h3{font-size:16px;font-weight:600;margin:0}
-.modal-overlay{display:none;position:fixed;inset:0;background:#00000099;z-index:200;align-items:flex-end;justify-content:center}
+h2{font-size:20px;font-weight:700;margin:0;color:var(--text)}
+h3{font-size:16px;font-weight:600;margin:0;color:var(--text)}
+.modal-overlay{display:none;position:fixed;inset:0;background:var(--overlay);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex;animation:fadeIn .15s}
-.modal{background:#1e293b;border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:430px;max-height:92vh;overflow-y:auto;animation:slideUp .25s ease}
+.modal{background:var(--modal-bg);border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:430px;max-height:92vh;overflow-y:auto;animation:slideUp .25s ease;transition:background .2s}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:40px;height:4px;background:#334155;border-radius:2px;margin:0 auto 16px}
+.modal-handle{width:40px;height:4px;background:var(--handle);border-radius:2px;margin:0 auto 16px}
 .form-row{margin-bottom:12px}
-.form-label{font-size:12px;color:#64748b;margin-bottom:4px;display:block}
+.form-label{font-size:12px;color:var(--text4);margin-bottom:4px;display:block;font-weight:600}
 .tooth{width:30px;height:34px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid transparent;transition:all .15s;flex-shrink:0}
 .teeth-row{display:flex;gap:3px;overflow-x:auto;padding-bottom:4px}
-.tooth-num{font-size:8px;color:#475569;text-align:center}
-.cond-btn{padding:4px 9px;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;white-space:nowrap;font-family:inherit}
-.drug-item{background:#1e293b;border-radius:14px;padding:13px 15px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
-.cat-btn{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid #334155;background:#1e293b;color:#64748b;font-family:inherit}
-.cat-btn.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
-.cat-btn.green.active{background:#22c55e;border-color:#22c55e}
-.cat-btn.purple.active{background:#8b5cf6;border-color:#8b5cf6}
-.cat-btn.orange.active{background:#f97316;border-color:#f97316}
+.tooth-num{font-size:8px;color:var(--text5);text-align:center}
+.cond-btn{padding:4px 9px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--input-bg);color:var(--text3);white-space:nowrap;font-family:inherit;transition:all .15s}
+.drug-item{background:var(--card-bg);border-radius:14px;padding:13px 15px;margin-bottom:8px;border:1px solid var(--border);cursor:pointer;transition:background .2s}
+.cat-btn{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;border:1px solid var(--border);background:var(--card-bg);color:var(--text4);font-family:inherit;transition:all .15s}
+.cat-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cat-btn.green.active{background:#22c55e;border-color:#22c55e;color:#fff}
+.cat-btn.purple.active{background:#8b5cf6;border-color:#8b5cf6;color:#fff}
+.cat-btn.orange.active{background:#f97316;border-color:#f97316;color:#fff}
 .cats{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
-.list-item{background:#1e293b;border-radius:14px;padding:13px 15px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
+.list-item{background:var(--card-bg);border-radius:14px;padding:13px 15px;margin-bottom:8px;border:1px solid var(--border);cursor:pointer;transition:background .2s,border-color .2s}
 .list-item:active{opacity:.7}
 .search-wrap{position:relative;margin-bottom:14px}
-.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#475569;pointer-events:none}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text5);pointer-events:none}
 .search-wrap input{padding-left:38px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.stat-mini{background:#1e293b;border-radius:12px;padding:12px;border:1px solid #334155;text-align:center}
-.empty{text-align:center;padding:36px 20px;color:#475569}
+.stat-mini{background:var(--card-bg);border-radius:12px;padding:12px;border:1px solid var(--border);text-align:center;transition:background .2s}
+.empty{text-align:center;padding:36px 20px;color:var(--text5)}
 .empty-icon{font-size:36px;margin-bottom:8px}
-.fab{position:fixed;bottom:78px;right:16px;width:50px;height:50px;border-radius:15px;background:#0ea5e9;border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 20px #0ea5e966;z-index:50;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.fab{position:fixed;bottom:78px;right:16px;width:50px;height:50px;border-radius:15px;background:var(--accent);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 20px var(--shadow);z-index:50;display:flex;align-items:center;justify-content:center;font-family:inherit}
 .fab:active{transform:scale(.93)}
-.section-title{font-size:12px;font-weight:600;color:#64748b;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.5px}
-.progress-bar{height:6px;background:#0f172a;border-radius:3px;overflow:hidden;margin-top:6px}
+.section-title{font-size:12px;font-weight:700;color:var(--text4);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.6px}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:6px}
 .progress-fill{height:100%;border-radius:3px;transition:width .4s}
 .tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;margin:2px}
 .avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.treatment-step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #0f172a}
-.step-check{width:22px;height:22px;border-radius:6px;border:2px solid #334155;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:12px}
+.treatment-step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg3)}
+.step-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:12px}
 .step-check.done{background:#22c55e;border-color:#22c55e;color:#fff}
-.flashcard{background:#1e293b;border-radius:20px;padding:28px 20px;border:1px solid #334155;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;position:relative}
-.quiz-option{padding:12px 16px;border-radius:12px;border:1px solid #334155;background:#0f172a;color:#f1f5f9;cursor:pointer;font-size:14px;font-family:inherit;width:100%;text-align:left;margin-bottom:8px}
-.quiz-option.correct{background:#22c55e22;border-color:#22c55e;color:#22c55e}
+.flashcard{background:var(--card-bg);border-radius:20px;padding:28px 20px;border:1px solid var(--border);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;position:relative;transition:background .2s}
+.quiz-option{padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);cursor:pointer;font-size:14px;font-family:inherit;width:100%;text-align:left;margin-bottom:8px;transition:all .15s}
+.quiz-option.correct{background:#22c55e22;border-color:#22c55e;color:#16a34a}
+html.light .quiz-option.correct{color:#15803d}
 .quiz-option.wrong{background:#ef444422;border-color:#ef4444;color:#ef4444}
-.quiz-option.reveal{background:#334155;color:#94a3b8;cursor:default}
-.proto-step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #1e293b}
-.proto-num{width:26px;height:26px;border-radius:8px;background:#0ea5e922;color:#0ea5e9;border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.anatomy-label{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #0f172a}
+.quiz-option.reveal{background:var(--bg3);color:var(--text4);cursor:default}
+.proto-step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border2)}
+.proto-num{width:26px;height:26px;border-radius:8px;background:#0ea5e922;color:var(--accent);border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.anatomy-label{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bg3)}
 .anatomy-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-/* Timer */
 .timer-ring{transition:stroke-dashoffset .5s linear}
 .timer-btn{width:64px;height:64px;border-radius:20px;border:none;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .15s}
 .timer-btn:active{transform:scale(.93)}
-/* AI Chat */
 .ai-bubble{padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.6;max-width:90%;margin-bottom:10px}
-.ai-bubble.user{background:#0ea5e9;color:#fff;margin-left:auto;border-radius:16px 16px 4px 16px}
-.ai-bubble.bot{background:#1e293b;color:#f1f5f9;border:1px solid #334155;border-radius:16px 16px 16px 4px}
+.ai-bubble.user{background:var(--accent);color:#fff;margin-left:auto;border-radius:16px 16px 4px 16px}
+.ai-bubble.bot{background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:16px 16px 16px 4px}
 .ai-bubble.thinking{animation:pulse 1.2s infinite}
-/* Schedule */
 .sched-slot{padding:10px 12px;border-radius:10px;margin-bottom:6px;border-left:3px solid transparent;cursor:pointer}
-.sched-slot.busy{background:#0ea5e922;border-left-color:#0ea5e9}
-.sched-slot.free{background:#0f172a;border:1px solid #1e293b;border-left:3px solid #334155}
-/* Diff Diagnosis */
-.symptom-btn{padding:8px 12px;border-radius:10px;font-size:13px;cursor:pointer;border:1px solid #334155;background:#0f172a;color:#94a3b8;font-family:inherit;text-align:left}
-.symptom-btn.selected{background:#0ea5e922;color:#0ea5e9;border-color:#0ea5e944}
-.diag-result{background:#1e293b;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #334155}
-/* Photo */
-.photo-thumb{width:80px;height:80px;border-radius:10px;object-fit:cover;cursor:pointer}
-.photo-grid{display:flex;flex-wrap:wrap;gap:8px}
+.sched-slot.busy{background:#0ea5e922;border-left-color:var(--accent)}
+.sched-slot.free{background:var(--input-bg);border:1px solid var(--border2);border-left:3px solid var(--border)}
+.symptom-btn{padding:8px 12px;border-radius:10px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--input-bg);color:var(--text3);font-family:inherit;text-align:left;transition:all .15s}
+.symptom-btn.selected{background:#0ea5e922;color:var(--accent);border-color:var(--accent)66;font-weight:600}
+html.light .symptom-btn.selected{background:#e0f2fe;color:#0284c7;border-color:#7dd3fc}
+.diag-result{background:var(--card-bg);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border);transition:background .2s}
+/* Theme toggle */
+.theme-toggle{width:48px;height:26px;border-radius:13px;border:2px solid var(--border);background:var(--bg3);cursor:pointer;position:relative;transition:all .2s;flex-shrink:0}
+.theme-toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:var(--text4);top:2px;left:2px;transition:all .2s}
+html.light .theme-toggle{background:#bfdbfe;border-color:#93c5fd}
+html.light .theme-toggle::after{background:#f59e0b;left:24px}
+/* Light mode specific overrides for better readability */
+html.light .section-title{color:var(--text5)}
+html.light .label{color:var(--text5)}
+html.light .form-label{color:var(--text5)}
+html.light .nav-btn{color:var(--text4)}
+html.light .nav-btn.active{color:#0284c7}
+html.light h2,html.light h3{color:#0f172a}
+html.light .drug-item .text-dose{color:#0369a1}
 </style>
 </head>
 <body>
@@ -113,15 +175,22 @@ h3{font-size:16px;font-weight:600;margin:0}
 <div id="page-home" class="page active">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
     <div>
-      <p style="color:#64748b;font-size:13px">Добро пожаловать</p>
-      <h1 style="font-size:24px;font-weight:700;letter-spacing:-.5px;margin:2px 0">DentAssist <span style="color:#38bdf8">Pro</span> <span style="font-size:14px;color:#f97316;font-weight:600">3.0</span></h1>
+      <p style="color:var(--text4);font-size:13px">Добро пожаловать</p>
+      <h1 style="font-size:24px;font-weight:700;letter-spacing:-.5px;margin:2px 0">DentAssist <span style="color:var(--accent)">Pro</span> <span style="font-size:14px;color:#f97316;font-weight:600">3.0</span></h1>
     </div>
-    <div id="home-date" style="text-align:right;font-size:12px;color:#64748b;padding-top:4px"></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;padding-top:2px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:13px">🌙</span>
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Переключить тему"></button>
+        <span style="font-size:13px">☀️</span>
+      </div>
+      <div id="home-date" style="font-size:12px;color:var(--text4)"></div>
+    </div>
   </div>
   <div class="grid3" style="margin:14px 0">
-    <div class="stat-mini"><div style="font-size:20px">👤</div><div id="stat-patients" style="font-size:20px;font-weight:700;color:#38bdf8">0</div><div style="font-size:9px;color:#64748b">Пациентов</div></div>
-    <div class="stat-mini"><div style="font-size:20px">📋</div><div id="stat-plans" style="font-size:20px;font-weight:700;color:#a78bfa">0</div><div style="font-size:9px;color:#64748b">Процедур</div></div>
-    <div class="stat-mini"><div style="font-size:20px">🎓</div><div id="stat-score" style="font-size:20px;font-weight:700;color:#22c55e">0%</div><div style="font-size:9px;color:#64748b">Тесты</div></div>
+    <div class="stat-mini"><div style="font-size:20px">👤</div><div id="stat-patients" style="font-size:20px;font-weight:700;color:var(--accent)">0</div><div style="font-size:9px;color:var(--text4)">Пациентов</div></div>
+    <div class="stat-mini"><div style="font-size:20px">📋</div><div id="stat-plans" style="font-size:20px;font-weight:700;color:#a78bfa">0</div><div style="font-size:9px;color:var(--text4)">Процедур</div></div>
+    <div class="stat-mini"><div style="font-size:20px">🎓</div><div id="stat-score" style="font-size:20px;font-weight:700;color:#22c55e">0%</div><div style="font-size:9px;color:var(--text4)">Тесты</div></div>
   </div>
   <div class="section-title">Клиника</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
@@ -209,7 +278,7 @@ h3{font-size:16px;font-weight:600;margin:0}
     <h2>🤖 AI Диагностика</h2>
   </div>
   <div class="card" style="border-color:#f9731644;background:linear-gradient(135deg,#f9731608,#1e293b)">
-    <div style="font-size:13px;color:#94a3b8;line-height:1.6">Опишите симптомы пациента — AI предложит дифференциальный диагноз, тактику лечения и препараты. Не заменяет клическое суждение врача.</div>
+    <div style="font-size:13px;color:var(--text3);line-height:1.6">Опишите симптомы пациента — AI предложит дифференциальный диагноз, тактику лечения и препараты. Не заменяет клическое суждение врача.</div>
   </div>
   <div id="ai-chat" style="min-height:200px;margin-bottom:12px"></div>
   <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -250,17 +319,17 @@ h3{font-size:16px;font-weight:600;margin:0}
   <div class="card" style="text-align:center">
     <div style="position:relative;width:200px;height:200px;margin:0 auto 16px">
       <svg width="200" height="200" style="transform:rotate(-90deg)">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="#1e293b" stroke-width="12"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--bg2)" stroke-width="12"/>
         <circle id="timer-ring" cx="100" cy="100" r="88" fill="none" stroke="#0ea5e9" stroke-width="12" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="0" class="timer-ring"/>
       </svg>
       <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
         <div id="timer-display" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums">00:00</div>
-        <div id="timer-label" style="font-size:13px;color:#64748b;margin-top:2px">Выберите процедуру</div>
+        <div id="timer-label" style="font-size:13px;color:var(--text4);margin-top:2px">Выберите процедуру</div>
       </div>
     </div>
     <div style="display:flex;justify-content:center;gap:12px">
       <button class="timer-btn" id="timer-start-btn" onclick="toggleTimer()" style="background:#0ea5e9;color:#fff;width:80px;height:80px;font-size:28px;border-radius:24px">▶</button>
-      <button class="timer-btn" onclick="resetTimer()" style="background:#1e293b;border:1px solid #334155;color:#64748b">↺</button>
+      <button class="timer-btn" onclick="resetTimer()" style="background:var(--card-bg);border:1px solid var(--border);color:var(--text4)">↺</button>
     </div>
   </div>
   <div id="timer-log" style="margin-top:4px"></div>
@@ -557,9 +626,9 @@ const PROTOCOLS=[
 ];
 
 const ATLAS_DATA=[
-  {cat:"Строение зуба",content:`<div class="card"><div class="label">Схема строения зуба</div><svg viewBox="0 0 280 340" style="width:100%;max-width:280px;display:block;margin:0 auto 12px"><defs><linearGradient id="en" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#cbd5e1"/></linearGradient><linearGradient id="de" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient><linearGradient id="pu" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fca5a5"/><stop offset="100%" stop-color="#f87171"/></linearGradient><linearGradient id="ce" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#4ade80"/></linearGradient></defs><path d="M100,20 Q80,10 70,40 Q60,80 65,120 L215,120 Q220,80 210,40 Q200,10 180,20 Q160,5 140,8 Q120,5 100,20Z" fill="url(#en)" stroke="#94a3b8" stroke-width="1.5"/><path d="M108,28 Q90,22 83,48 Q75,82 79,116 L201,116 Q205,82 197,48 Q190,22 172,28 Q158,16 140,19 Q122,16 108,28Z" fill="url(#de)"/><path d="M125,45 Q115,55 114,80 Q113,100 115,116 L165,116 Q167,100 166,80 Q165,55 155,45 Q148,35 140,36 Q132,35 125,45Z" fill="url(#pu)"/><path d="M79,116 Q72,160 68,200 Q65,240 75,280 Q85,300 100,290 Q115,280 118,250 Q120,230 120,200 L115,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M201,116 Q208,160 212,200 Q215,240 205,280 Q195,300 180,290 Q165,280 162,250 Q160,230 160,200 L165,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M114,116 Q110,150 107,185 Q104,220 110,265 Q114,280 120,278 Q126,270 124,250 Q122,225 122,200 L120,116Z" fill="url(#pu)"/><path d="M165,116 Q168,150 172,185 Q175,220 170,265 Q166,280 160,278 Q154,270 156,250 Q158,225 158,200 L160,116Z" fill="url(#pu)"/><line x1="65" y1="120" x2="215" y2="120" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/><text x="228" y="55" fill="#e2e8f0" font-size="11" font-family="system-ui">Эмаль</text><text x="228" y="85" fill="#fbbf24" font-size="11" font-family="system-ui">Дентин</text><text x="228" y="112" fill="#f87171" font-size="11" font-family="system-ui">Пульпа</text><text x="228" y="128" fill="#94a3b8" font-size="10" font-family="system-ui">ЦЭС</text><text x="228" y="170" fill="#4ade80" font-size="11" font-family="system-ui">Цемент</text><text x="228" y="240" fill="#fbbf24" font-size="11" font-family="system-ui">Корень</text><text x="228" y="285" fill="#f87171" font-size="11" font-family="system-ui">Канал</text><line x1="215" y1="52" x2="226" y2="52" stroke="#94a3b8" stroke-width="1"/><line x1="200" y1="82" x2="226" y2="82" stroke="#94a3b8" stroke-width="1"/><line x1="165" y1="109" x2="226" y2="109" stroke="#94a3b8" stroke-width="1"/></svg><div style="display:flex;flex-direction:column;gap:6px">${[{color:"#e2e8f0",name:"Эмаль",desc:"Самая твёрдая ткань организма (97% минералов). Не восстанавливается"},{color:"#fbbf24",name:"Дентин",desc:"70% минералов. Пронизан дентинными канальцами. Чувствителен к раздражителям"},{color:"#f87171",name:"Пульпа",desc:"Рыхлая соединительная ткань: нервы, сосуды. Питает и защищает зуб"},{color:"#4ade80",name:"Цемент",desc:"Покрывает корень. Место прикрепления периодонтальных волокон"}].map(i=>`<div class="anatomy-label"><div class="anatomy-dot" style="background:${i.color}"></div><div><b style="font-size:13px">${i.name}</b><div style="font-size:12px;color:#64748b">${i.desc}</div></div></div>`).join('')}</div></div>`},
-  {cat:"Типы зубов",content:`<div class="card"><div class="label">Группы зубов</div>${[{icon:"🦷",name:"Резцы (1-2)",f:"11,12,21,22 / 31,32,41,42",func:"Откусывание",roots:"1 корень",canals:"1 канал"},{icon:"🦷",name:"Клыки (3)",f:"13,23/33,43",func:"Разрывание",roots:"1 корень (самый длинный)",canals:"1 канал"},{icon:"🦷",name:"Премоляры (4-5)",f:"14,15,24,25/34,35,44,45",func:"Размельчение",roots:"1–2 корня",canals:"1–3 канала"},{icon:"🦷",name:"Моляры (6-7-8)",f:"16,17,18/36,37,38",func:"Перетирание",roots:"В/ч: 3 корня. Н/ч: 2 корня",canals:"3–4 канала"}].map(t=>`<div style="background:#0f172a;border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid #1e293b"><div style="font-weight:600;font-size:14px;margin-bottom:4px">${t.icon} ${t.name}</div><div style="font-size:12px;color:#38bdf8;margin-bottom:4px">${t.f}</div><div style="font-size:12px;color:#94a3b8">⚡ ${t.func} · 🌿 ${t.roots} · ${t.canals}</div></div>`).join('')}</div>`},
-  {cat:"Прорезывание",content:`<div class="card"><div class="label">Молочные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:#64748b"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th><th style="padding:5px 4px">Смена</th></tr>${[["Центр. резцы","6–8 мес","7–9 мес","6–8 лет"],["Бок. резцы","9–12 мес","9–11 мес","7–9 лет"],["Клыки","16–20 мес","16–20 мес","10–12 лет"],["1-е моляры","12–16 мес","14–18 мес","9–11 лет"],["2-е моляры","20–30 мес","24–30 мес","10–12 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:#38bdf8;text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td><td style="padding:6px 4px;color:#22c55e;text-align:center">${r[3]}</td></tr>`).join('')}</table></div></div><div class="card"><div class="label">Постоянные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:#64748b"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th></tr>${[["Центр. резцы","6–7 лет","7–8 лет"],["Бок. резцы","7–8 лет","8–9 лет"],["Клыки","9–11 лет","11–13 лет"],["1-е премоляры","10–12 лет","10–11 лет"],["2-е премоляры","11–13 лет","10–12 лет"],["1-е моляры","6–7 лет","6–7 лет"],["2-е моляры","12–13 лет","12–13 лет"],["Зубы мудрости","17–25 лет","17–25 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:#38bdf8;text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td></tr>`).join('')}</table></div></div>`},
+  {cat:"Строение зуба",content:`<div class="card"><div class="label">Схема строения зуба</div><svg viewBox="0 0 280 340" style="width:100%;max-width:280px;display:block;margin:0 auto 12px"><defs><linearGradient id="en" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#cbd5e1"/></linearGradient><linearGradient id="de" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient><linearGradient id="pu" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fca5a5"/><stop offset="100%" stop-color="#f87171"/></linearGradient><linearGradient id="ce" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#4ade80"/></linearGradient></defs><path d="M100,20 Q80,10 70,40 Q60,80 65,120 L215,120 Q220,80 210,40 Q200,10 180,20 Q160,5 140,8 Q120,5 100,20Z" fill="url(#en)" stroke="#94a3b8" stroke-width="1.5"/><path d="M108,28 Q90,22 83,48 Q75,82 79,116 L201,116 Q205,82 197,48 Q190,22 172,28 Q158,16 140,19 Q122,16 108,28Z" fill="url(#de)"/><path d="M125,45 Q115,55 114,80 Q113,100 115,116 L165,116 Q167,100 166,80 Q165,55 155,45 Q148,35 140,36 Q132,35 125,45Z" fill="url(#pu)"/><path d="M79,116 Q72,160 68,200 Q65,240 75,280 Q85,300 100,290 Q115,280 118,250 Q120,230 120,200 L115,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M201,116 Q208,160 212,200 Q215,240 205,280 Q195,300 180,290 Q165,280 162,250 Q160,230 160,200 L165,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M114,116 Q110,150 107,185 Q104,220 110,265 Q114,280 120,278 Q126,270 124,250 Q122,225 122,200 L120,116Z" fill="url(#pu)"/><path d="M165,116 Q168,150 172,185 Q175,220 170,265 Q166,280 160,278 Q154,270 156,250 Q158,225 158,200 L160,116Z" fill="url(#pu)"/><line x1="65" y1="120" x2="215" y2="120" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/><text x="228" y="55" fill="#e2e8f0" font-size="11" font-family="system-ui">Эмаль</text><text x="228" y="85" fill="#fbbf24" font-size="11" font-family="system-ui">Дентин</text><text x="228" y="112" fill="#f87171" font-size="11" font-family="system-ui">Пульпа</text><text x="228" y="128" fill="#94a3b8" font-size="10" font-family="system-ui">ЦЭС</text><text x="228" y="170" fill="#4ade80" font-size="11" font-family="system-ui">Цемент</text><text x="228" y="240" fill="#fbbf24" font-size="11" font-family="system-ui">Корень</text><text x="228" y="285" fill="#f87171" font-size="11" font-family="system-ui">Канал</text><line x1="215" y1="52" x2="226" y2="52" stroke="#94a3b8" stroke-width="1"/><line x1="200" y1="82" x2="226" y2="82" stroke="#94a3b8" stroke-width="1"/><line x1="165" y1="109" x2="226" y2="109" stroke="#94a3b8" stroke-width="1"/></svg><div style="display:flex;flex-direction:column;gap:6px">${[{color:"#e2e8f0",name:"Эмаль",desc:"Самая твёрдая ткань организма (97% минералов). Не восстанавливается"},{color:"#fbbf24",name:"Дентин",desc:"70% минералов. Пронизан дентинными канальцами. Чувствителен к раздражителям"},{color:"#f87171",name:"Пульпа",desc:"Рыхлая соединительная ткань: нервы, сосуды. Питает и защищает зуб"},{color:"#4ade80",name:"Цемент",desc:"Покрывает корень. Место прикрепления периодонтальных волокон"}].map(i=>`<div class="anatomy-label"><div class="anatomy-dot" style="background:${i.color}"></div><div><b style="font-size:13px">${i.name}</b><div style="font-size:12px;color:var(--text4)">${i.desc}</div></div></div>`).join('')}</div></div>`},
+  {cat:"Типы зубов",content:`<div class="card"><div class="label">Группы зубов</div>${[{icon:"🦷",name:"Резцы (1-2)",f:"11,12,21,22 / 31,32,41,42",func:"Откусывание",roots:"1 корень",canals:"1 канал"},{icon:"🦷",name:"Клыки (3)",f:"13,23/33,43",func:"Разрывание",roots:"1 корень (самый длинный)",canals:"1 канал"},{icon:"🦷",name:"Премоляры (4-5)",f:"14,15,24,25/34,35,44,45",func:"Размельчение",roots:"1–2 корня",canals:"1–3 канала"},{icon:"🦷",name:"Моляры (6-7-8)",f:"16,17,18/36,37,38",func:"Перетирание",roots:"В/ч: 3 корня. Н/ч: 2 корня",canals:"3–4 канала"}].map(t=>`<div style="background:var(--input-bg);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--border2)"><div style="font-weight:600;font-size:14px;margin-bottom:4px">${t.icon} ${t.name}</div><div style="font-size:12px;color:var(--accent2);margin-bottom:4px">${t.f}</div><div style="font-size:12px;color:var(--text3)">⚡ ${t.func} · 🌿 ${t.roots} · ${t.canals}</div></div>`).join('')}</div>`},
+  {cat:"Прорезывание",content:`<div class="card"><div class="label">Молочные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th><th style="padding:5px 4px">Смена</th></tr>${[["Центр. резцы","6–8 мес","7–9 мес","6–8 лет"],["Бок. резцы","9–12 мес","9–11 мес","7–9 лет"],["Клыки","16–20 мес","16–20 мес","10–12 лет"],["1-е моляры","12–16 мес","14–18 мес","9–11 лет"],["2-е моляры","20–30 мес","24–30 мес","10–12 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:var(--accent2);text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td><td style="padding:6px 4px;color:#22c55e;text-align:center">${r[3]}</td></tr>`).join('')}</table></div></div><div class="card"><div class="label">Постоянные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th></tr>${[["Центр. резцы","6–7 лет","7–8 лет"],["Бок. резцы","7–8 лет","8–9 лет"],["Клыки","9–11 лет","11–13 лет"],["1-е премоляры","10–12 лет","10–11 лет"],["2-е премоляры","11–13 лет","10–12 лет"],["1-е моляры","6–7 лет","6–7 лет"],["2-е моляры","12–13 лет","12–13 лет"],["Зубы мудрости","17–25 лет","17–25 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:var(--accent2);text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td></tr>`).join('')}</table></div></div>`},
 ];
 
 const QUIZ_DATA=[
@@ -650,8 +719,8 @@ const GLOSSARY=[
 ];
 
 const NORMS_DATA=[
-  {cat:"Индексы",content:`<div class="card"><div class="label">КПУ — поражённость кариесом</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:#64748b"><th style="padding:5px 4px;text-align:left">КПУ</th><th style="padding:5px 4px;text-align:left">Оценка</th></tr>${[["0–1","Очень низкий"],["2–4","Низкий"],["5–8","Средний"],["9–13","Высокий"],["14+","Очень высокий"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px;color:#38bdf8;font-weight:600">${r[0]}</td><td style="padding:6px 4px;color:#94a3b8">${r[1]}</td></tr>`).join('')}</table></div></div><div class="card"><div class="label">ИГР-У / OHI-S</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:#64748b"><th style="padding:5px 4px;text-align:left">Значение</th><th style="padding:5px 4px;text-align:left">Гигиена</th></tr>${[["0–0.6","Хорошая"],["0.7–1.6","Удовлетворительная"],["1.7–2.5","Неудовлетворительная"],["2.6–3.0","Плохая"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px;color:#38bdf8;font-weight:600">${r[0]}</td><td style="padding:6px 4px;color:#94a3b8">${r[1]}</td></tr>`).join('')}</table></div></div>`},
-  {cat:"Нормы",content:`<div class="card"><div class="label">Зондирование пародонтального кармана</div>${[{val:"1–3 мм",color:"#22c55e",label:"Норма"},{val:"3–5 мм",color:"#f59e0b",label:"Лёгкий пародонтит"},{val:"5–7 мм",color:"#f97316",label:"Средний пародонтит"},{val:">7 мм",color:"#ef4444",label:"Тяжёлый пародонтит"}].map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #0f172a"><div style="background:${r.color}22;color:${r.color};border:1px solid ${r.color}44;border-radius:8px;padding:4px 10px;font-weight:700;font-size:12px;min-width:65px;text-align:center">${r.val}</div><div style="font-size:13px;color:#94a3b8">${r.label}</div></div>`).join('')}</div><div class="card"><div class="label">ЭОД</div>${[{val:"2–6 мкА",color:"#22c55e",label:"Норма"},{val:"7–20 мкА",color:"#f59e0b",label:"Хронический пульпит"},{val:"20–60 мкА",color:"#f97316",label:"Некроз пульпы"},{val:">100 мкА",color:"#ef4444",label:"Периодонтит"}].map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #0f172a"><div style="background:${r.color}22;color:${r.color};border:1px solid ${r.color}44;border-radius:8px;padding:4px 8px;font-weight:700;font-size:12px;min-width:70px;text-align:center">${r.val}</div><div style="font-size:13px;color:#94a3b8">${r.label}</div></div>`).join('')}</div>`},
+  {cat:"Индексы",content:`<div class="card"><div class="label">КПУ — поражённость кариесом</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">КПУ</th><th style="padding:5px 4px;text-align:left">Оценка</th></tr>${[["0–1","Очень низкий"],["2–4","Низкий"],["5–8","Средний"],["9–13","Высокий"],["14+","Очень высокий"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px;color:var(--accent2);font-weight:600">${r[0]}</td><td style="padding:6px 4px;color:var(--text3)">${r[1]}</td></tr>`).join('')}</table></div></div><div class="card"><div class="label">ИГР-У / OHI-S</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">Значение</th><th style="padding:5px 4px;text-align:left">Гигиена</th></tr>${[["0–0.6","Хорошая"],["0.7–1.6","Удовлетворительная"],["1.7–2.5","Неудовлетворительная"],["2.6–3.0","Плохая"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px;color:var(--accent2);font-weight:600">${r[0]}</td><td style="padding:6px 4px;color:var(--text3)">${r[1]}</td></tr>`).join('')}</table></div></div>`},
+  {cat:"Нормы",content:`<div class="card"><div class="label">Зондирование пародонтального кармана</div>${[{val:"1–3 мм",color:"#22c55e",label:"Норма"},{val:"3–5 мм",color:"#f59e0b",label:"Лёгкий пародонтит"},{val:"5–7 мм",color:"#f97316",label:"Средний пародонтит"},{val:">7 мм",color:"#ef4444",label:"Тяжёлый пародонтит"}].map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bg3)"><div style="background:${r.color}22;color:${r.color};border:1px solid ${r.color}44;border-radius:8px;padding:4px 10px;font-weight:700;font-size:12px;min-width:65px;text-align:center">${r.val}</div><div style="font-size:13px;color:var(--text3)">${r.label}</div></div>`).join('')}</div><div class="card"><div class="label">ЭОД</div>${[{val:"2–6 мкА",color:"#22c55e",label:"Норма"},{val:"7–20 мкА",color:"#f59e0b",label:"Хронический пульпит"},{val:"20–60 мкА",color:"#f97316",label:"Некроз пульпы"},{val:">100 мкА",color:"#ef4444",label:"Периодонтит"}].map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bg3)"><div style="background:${r.color}22;color:${r.color};border:1px solid ${r.color}44;border-radius:8px;padding:4px 8px;font-weight:700;font-size:12px;min-width:70px;text-align:center">${r.val}</div><div style="font-size:13px;color:var(--text3)">${r.label}</div></div>`).join('')}</div>`},
 ];
 
 // Diff diagnosis data
@@ -789,9 +858,9 @@ function renderPatients(){
         <div class="avatar" style="background:#0ea5e922;border:1px solid #0ea5e944;font-size:16px">👤</div>
         <div style="flex:1;min-width:0">
           <div style="font-weight:600;font-size:15px">${p.name}</div>
-          <div style="font-size:12px;color:#64748b;margin-top:1px">${age?age+' лет':''}${p.phone?' · '+p.phone:''}</div>
+          <div style="font-size:12px;color:var(--text4);margin-top:1px">${age?age+' лет':''}${p.phone?' · '+p.phone:''}</div>
           ${p.allergy?`<div style="font-size:11px;color:#ef4444">⚠️ ${p.allergy}</div>`:''}
-          ${total?`<div style="margin-top:4px"><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:${done/total*100}%;background:#22c55e"></div></div><div style="font-size:10px;color:#64748b;margin-top:2px">${done}/${total} процедур</div></div>`:''}
+          ${total?`<div style="margin-top:4px"><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:${done/total*100}%;background:#22c55e"></div></div><div style="font-size:10px;color:var(--text4);margin-top:2px">${done}/${total} процедур</div></div>`:''}
         </div>
         <div style="color:#334155;font-size:20px">›</div>
       </div>
@@ -809,8 +878,8 @@ function openPatientDetail(id){
   document.getElementById('detail-content').innerHTML=`
     <div class="card"><div style="display:flex;justify-content:space-between">
       <div><div style="font-size:17px;font-weight:700">${p.name}</div>
-        ${age?`<div style="color:#64748b;font-size:13px;margin-top:2px">${age} лет${p.dob?' · '+new Date(p.dob).toLocaleDateString('ru'):''}</div>`:''}
-        ${p.phone?`<div style="color:#64748b;font-size:13px">📞 ${p.phone}</div>`:''}
+        ${age?`<div style="color:var(--text4);font-size:13px;margin-top:2px">${age} лет${p.dob?' · '+new Date(p.dob).toLocaleDateString('ru'):''}</div>`:''}
+        ${p.phone?`<div style="color:var(--text4);font-size:13px">📞 ${p.phone}</div>`:''}
       </div>
       <div style="display:flex;gap:6px">
         <button class="btn" style="font-size:12px;padding:5px 10px" onclick="exportPatientPDF('${p.id}')">📄 PDF</button>
@@ -821,36 +890,36 @@ function openPatientDetail(id){
     </div>
     ${p.complaints||p.diagnosis?`<div class="card">
       ${p.diagnosis?`<div style="margin-bottom:${p.complaints?'10px':'0'}"><div class="label">Диагноз</div><div style="font-size:14px">${p.diagnosis}</div></div>`:''}
-      ${p.complaints?`<div><div class="label">Жалобы</div><div style="font-size:13px;color:#94a3b8;line-height:1.5">${p.complaints}</div></div>`:''}
+      ${p.complaints?`<div><div class="label">Жалобы</div><div style="font-size:13px;color:var(--text3);line-height:1.5">${p.complaints}</div></div>`:''}
     </div>`:''}
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div class="label" style="margin:0">План лечения</div>
       <button class="btn btn-primary" style="font-size:12px;padding:5px 12px" onclick="openPlanModal('${p.id}')">+ Добавить</button>
     </div>
     ${plans.length?`<div class="card" style="padding:8px 14px">
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text4);margin-bottom:6px">
         <span>✅ ${plans.filter(pl=>pl.done).length}/${plans.length}</span>
         <span style="color:#22c55e">${doneCost.toLocaleString()} / ${totalCost.toLocaleString()} ₽</span>
       </div>
       <div class="progress-bar" style="margin-bottom:8px"><div class="progress-fill" style="width:${plans.length?plans.filter(pl=>pl.done).length/plans.length*100:0}%;background:#22c55e"></div></div>
       ${plans.map((pl,i)=>`<div class="treatment-step">
         <div class="step-check ${pl.done?'done':''}" onclick="togglePlan('${p.id}',${i})">${pl.done?'✓':''}</div>
-        <div style="flex:1"><div style="font-size:14px;${pl.done?'text-decoration:line-through;color:#475569':''}">${pl.proc}</div>
-          <div style="font-size:12px;color:#64748b">${pl.tooth?'Зуб '+pl.tooth+' · ':''}${pl.cost?parseInt(pl.cost).toLocaleString()+' ₽':''}</div>
+        <div style="flex:1"><div style="font-size:14px;${pl.done?'text-decoration:line-through;color:var(--text5)':''}">${pl.proc}</div>
+          <div style="font-size:12px;color:var(--text4)">${pl.tooth?'Зуб '+pl.tooth+' · ':''}${pl.cost?parseInt(pl.cost).toLocaleString()+' ₽':''}</div>
         </div>
-        <button onclick="deletePlan('${p.id}',${i})" style="background:none;border:none;color:#475569;cursor:pointer;font-size:18px;padding:0 4px">×</button>
+        <button onclick="deletePlan('${p.id}',${i})" style="background:none;border:none;color:var(--text5);cursor:pointer;font-size:18px;padding:0 4px">×</button>
       </div>`).join('')}
-    </div>`:`<div class="card" style="text-align:center;color:#475569;font-size:13px;padding:18px">Нет процедур</div>`}
+    </div>`:`<div class="card" style="text-align:center;color:var(--text5);font-size:13px;padding:18px">Нет процедур</div>`}
     <div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px">
       <div class="label" style="margin:0">История визитов</div>
       <button class="btn" style="font-size:12px;padding:5px 12px" onclick="addVisit('${p.id}')">+ Визит</button>
     </div>
     ${visits.length?`<div class="card" style="padding:8px 14px">
-      ${[...visits].reverse().map(v=>`<div style="padding:8px 0;border-bottom:1px solid #0f172a">
-        <div style="font-size:12px;color:#64748b">${new Date(v.date).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</div>
-        <div style="font-size:13px;color:#94a3b8;margin-top:2px;line-height:1.4">${v.note}</div>
+      ${[...visits].reverse().map(v=>`<div style="padding:8px 0;border-bottom:1px solid var(--bg3)">
+        <div style="font-size:12px;color:var(--text4)">${new Date(v.date).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;line-height:1.4">${v.note}</div>
       </div>`).join('')}
-    </div>`:`<div class="card" style="text-align:center;color:#475569;font-size:13px;padding:18px">Нет записей</div>`}`;
+    </div>`:`<div class="card" style="text-align:center;color:var(--text5);font-size:13px;padding:18px">Нет записей</div>`}`;
   showPage('patient-detail');
 }
 function openPlanModal(pid){currentPatientId=pid;['plan-proc','plan-tooth','plan-cost'].forEach(id=>document.getElementById(id).value='');document.getElementById('plan-modal').classList.add('open');}
@@ -964,7 +1033,7 @@ function renderDrugs(){
     if(!items.length)return;
     if(q)html+=`<div class="label" style="margin-bottom:6px">${cat.icon} ${cat.cat}</div>`;
     items.forEach((drug,i)=>{const key=cat.cat+i,open=activeDrug===key;
-      html+=`<div class="drug-item" onclick="toggleDrug('${key}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:600;font-size:14px">${drug.name}</div><div style="font-size:13px;color:#38bdf8;margin-top:3px">${drug.dose}</div></div><span style="color:#475569">${open?'▲':'▼'}</span></div>${open?`<div style="margin-top:10px;padding:10px;background:#0f172a;border-radius:8px;font-size:13px;color:#94a3b8;line-height:1.5">📝 ${drug.note}</div>`:''}</div>`;
+      html+=`<div class="drug-item" onclick="toggleDrug('${key}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:600;font-size:14px">${drug.name}</div><div style="font-size:13px;color:var(--accent);font-weight:600;margin-top:3px">${drug.dose}</div></div><span style="color:var(--text5)">${open?'▲':'▼'}</span></div>${open?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:8px;font-size:13px;color:var(--text3);line-height:1.5">📝 ${drug.note}</div>`:''}</div>`;
     });
   });
   document.getElementById('drug-list').innerHTML=html;
@@ -982,10 +1051,10 @@ function calcDose(){
   const coef=isAdult?1:0.5;
   if(d.isAnest){
     const maxMg=d.maxMg*w*coef,maxC=Math.floor(maxMg/d.mgPerCarp*10)/10,recC=Math.min(maxC,isAdult?4:2);
-    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:#0f172a;border-radius:10px;padding:12px;border:1px solid #334155"><div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс. доза</div><div style="font-size:24px;font-weight:700;color:#38bdf8">${Math.round(maxMg)}<span style="font-size:13px;color:#64748b"> мг</span></div></div><div style="text-align:center;background:#0f172a;border-radius:10px;padding:12px;border:1px solid #334155"><div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс. карпул</div><div style="font-size:24px;font-weight:700;color:#22c55e">${maxC}<span style="font-size:13px;color:#64748b"> карп.</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ Рекомендуется: <b>${recC} карп.</b> = ${Math.round(recC*d.mgPerCarp)} мг</div><div style="font-size:12px;color:#475569">${d.maxMg} мг/кг × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxMg)} мг ÷ ${d.mgPerCarp} = <b>${maxC} карп.</b></div></div>`;
+    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. доза</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxMg)}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. карпул</div><div style="font-size:24px;font-weight:700;color:#22c55e">${maxC}<span style="font-size:13px;color:var(--text4)"> карп.</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ Рекомендуется: <b>${recC} карп.</b> = ${Math.round(recC*d.mgPerCarp)} мг</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} мг/кг × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxMg)} мг ÷ ${d.mgPerCarp} = <b>${maxC} карп.</b></div></div>`;
   }else{
     const maxDay=d.maxMg*w*coef,perDose=Math.round(maxDay/d.perDose),tabs=Math.round(perDose/d.tabMg*10)/10;
-    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:#0f172a;border-radius:10px;padding:12px;border:1px solid #334155"><div style="font-size:11px;color:#64748b;margin-bottom:4px">Макс./сутки</div><div style="font-size:24px;font-weight:700;color:#38bdf8">${Math.round(maxDay)}<span style="font-size:13px;color:#64748b"> мг</span></div></div><div style="text-align:center;background:#0f172a;border-radius:10px;padding:12px;border:1px solid #334155"><div style="font-size:11px;color:#64748b;margin-bottom:4px">Разовая доза</div><div style="font-size:24px;font-weight:700;color:#22c55e">${perDose}<span style="font-size:13px;color:#64748b"> мг</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ ${tabs} табл. ${d.tabMg}мг × ${d.perDose} р/сут</div><div style="font-size:12px;color:#475569">${d.maxMg} ${d.unit} × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxDay)} мг/сут ÷ ${d.perDose} = <b>${perDose} мг/приём</b></div></div>`;
+    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс./сутки</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxDay)}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Разовая доза</div><div style="font-size:24px;font-weight:700;color:#22c55e">${perDose}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ ${tabs} табл. ${d.tabMg}мг × ${d.perDose} р/сут</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} ${d.unit} × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxDay)} мг/сут ÷ ${d.perDose} = <b>${perDose} мг/приём</b></div></div>`;
   }
 }
 
@@ -1000,7 +1069,7 @@ function renderMKB(){
     const items=q?cat.items.filter(d=>d.code.toLowerCase().includes(q.toLowerCase())||d.name.toLowerCase().includes(q.toLowerCase())):(activeMKBCat===cat.cat?cat.items:[]);
     if(!items.length)return;
     if(q)html+=`<div class="label" style="margin-bottom:6px">${cat.cat}</div>`;
-    items.forEach(item=>{html+=`<div class="mkb-item list-item" onclick="copyMKB('${item.code}','${item.name.replace(/'/g,"\\'")}')"><div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf633;padding:3px 7px;border-radius:6px;font-size:12px;font-weight:700;flex-shrink:0">${item.code}</span><div><div style="font-weight:600;font-size:14px">${item.name}</div>${item.desc?`<div style="font-size:12px;color:#64748b;margin-top:2px">${item.desc}</div>`:''}</div></div></div>`;});
+    items.forEach(item=>{html+=`<div class="mkb-item list-item" onclick="copyMKB('${item.code}','${item.name.replace(/'/g,"\\'")}')"><div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf633;padding:3px 7px;border-radius:6px;font-size:12px;font-weight:700;flex-shrink:0">${item.code}</span><div><div style="font-weight:600;font-size:14px">${item.name}</div>${item.desc?`<div style="font-size:12px;color:var(--text4);margin-top:2px">${item.desc}</div>`:''}</div></div></div>`;});
   });
   document.getElementById('mkb-list').innerHTML=html||`<div class="empty">Ничего не найдено</div>`;
 }
@@ -1011,12 +1080,12 @@ function renderProtoCats(){document.getElementById('proto-cats').innerHTML=PROTO
 function selectProtoCat(cat){activeProtoCat=cat;renderProtoCats();renderProtos();}
 function renderProtos(){
   const cat=PROTOCOLS.find(p=>p.cat===activeProtoCat);
-  document.getElementById('proto-list').innerHTML=cat.items.map((item,i)=>`<div class="list-item" onclick="showProto(${PROTOCOLS.indexOf(cat)},${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:#0ea5e922;border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${cat.icon}</div><div><div style="font-weight:600;font-size:14px">${item.title}</div><div style="font-size:12px;color:#64748b">${item.steps.length} шагов</div></div><div style="margin-left:auto;color:#334155;font-size:20px">›</div></div></div>`).join('');
+  document.getElementById('proto-list').innerHTML=cat.items.map((item,i)=>`<div class="list-item" onclick="showProto(${PROTOCOLS.indexOf(cat)},${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:#0ea5e922;border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${cat.icon}</div><div><div style="font-weight:600;font-size:14px">${item.title}</div><div style="font-size:12px;color:var(--text4)">${item.steps.length} шагов</div></div><div style="margin-left:auto;color:#334155;font-size:20px">›</div></div></div>`).join('');
 }
 function showProto(ci,ii){
   const item=PROTOCOLS[ci].items[ii];
   document.getElementById('proto-detail-title').textContent=item.title;
-  document.getElementById('proto-detail-content').innerHTML=`<div class="card">${item.steps.map(s=>`<div class="proto-step"><div class="proto-num">${s.n}</div><div style="font-size:14px;color:#94a3b8;line-height:1.5;flex:1">${s.text}</div></div>`).join('')}</div>`;
+  document.getElementById('proto-detail-content').innerHTML=`<div class="card">${item.steps.map(s=>`<div class="proto-step"><div class="proto-num">${s.n}</div><div style="font-size:14px;color:var(--text3);line-height:1.5;flex:1">${s.text}</div></div>`).join('')}</div>`;
   showPage('protocol-detail');
 }
 
@@ -1030,14 +1099,14 @@ function renderQuizHome(){
   document.getElementById('quiz-home').style.display='block';
   document.getElementById('quiz-question').style.display='none';
   document.getElementById('quiz-result').style.display='none';
-  document.getElementById('quiz-home').innerHTML=`<div class="card" style="margin-bottom:16px"><div class="label">Твои результаты</div>${QUIZ_DATA.map(cat=>{const sc=quizScores[cat.cat]||0,color=sc>=80?'#22c55e':sc>=50?'#f59e0b':'#ef4444';return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${cat.icon} ${cat.cat}</span><span style="color:${color};font-weight:600">${sc}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${sc}%;background:${color}"></div></div></div>`;}).join('')}</div>${QUIZ_DATA.map((cat,i)=>`<div class="list-item" onclick="startQuiz(${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:12px;background:#a78bfa22;border:1px solid #a78bfa44;display:flex;align-items:center;justify-content:center;font-size:20px">${cat.icon}</div><div><div style="font-weight:600;font-size:15px">${cat.cat}</div><div style="font-size:12px;color:#64748b">${cat.questions.length} вопросов</div></div><div style="margin-left:auto;color:${quizScores[cat.cat]>=80?'#22c55e':'#334155'};font-size:20px">${quizScores[cat.cat]>=80?'✓':'›'}</div></div></div>`).join('')}`;
+  document.getElementById('quiz-home').innerHTML=`<div class="card" style="margin-bottom:16px"><div class="label">Твои результаты</div>${QUIZ_DATA.map(cat=>{const sc=quizScores[cat.cat]||0,color=sc>=80?'#22c55e':sc>=50?'#f59e0b':'#ef4444';return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${cat.icon} ${cat.cat}</span><span style="color:${color};font-weight:600">${sc}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${sc}%;background:${color}"></div></div></div>`;}).join('')}</div>${QUIZ_DATA.map((cat,i)=>`<div class="list-item" onclick="startQuiz(${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:12px;background:#a78bfa22;border:1px solid #a78bfa44;display:flex;align-items:center;justify-content:center;font-size:20px">${cat.icon}</div><div><div style="font-weight:600;font-size:15px">${cat.cat}</div><div style="font-size:12px;color:var(--text4)">${cat.questions.length} вопросов</div></div><div style="margin-left:auto;color:${quizScores[cat.cat]>=80?'#22c55e':'#334155'};font-size:20px">${quizScores[cat.cat]>=80?'✓':'›'}</div></div></div>`).join('')}`;
 }
 function startQuiz(ci){quizState={ci,qIdx:0,correct:0,answers:[],cat:QUIZ_DATA[ci]};renderQuizQuestion();}
 function renderQuizQuestion(){
   document.getElementById('quiz-home').style.display='none';document.getElementById('quiz-result').style.display='none';
   const qs=document.getElementById('quiz-question');qs.style.display='block';
   const{cat,qIdx,correct}=quizState,q=cat.questions[qIdx],answered=quizState.answers[qIdx]!==undefined;
-  qs.innerHTML=`<div class="card" style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:#64748b">${qIdx+1} / ${cat.questions.length}</div><div style="font-size:12px;color:#22c55e">✓ ${correct}</div></div><div class="progress-bar" style="margin-bottom:14px"><div class="progress-fill" style="width:${qIdx/cat.questions.length*100}%;background:#0ea5e9"></div></div><div style="font-size:15px;font-weight:600;line-height:1.5;margin-bottom:16px">${q.q}</div>${q.opts.map((opt,i)=>{let cls='quiz-option';if(answered){cls+=i===q.ans?' correct':quizState.answers[qIdx]===i?' wrong':' reveal';}return`<button class="${cls}" onclick="answerQuiz(${i})" ${answered?'disabled':''}>${opt}</button>`;}).join('')}${answered?`<div style="margin-top:10px;padding:10px;background:#0f172a;border-radius:10px;font-size:13px;color:#94a3b8;line-height:1.5">💡 ${q.exp}</div>`:''}</div>${answered?`<button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="nextQuiz()">${qIdx+1<cat.questions.length?'Следующий →':'Завершить'}</button>`:''}<button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← Выйти</button>`;
+  qs.innerHTML=`<div class="card" style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:var(--text4)">${qIdx+1} / ${cat.questions.length}</div><div style="font-size:12px;color:#22c55e">✓ ${correct}</div></div><div class="progress-bar" style="margin-bottom:14px"><div class="progress-fill" style="width:${qIdx/cat.questions.length*100}%;background:#0ea5e9"></div></div><div style="font-size:15px;font-weight:600;line-height:1.5;margin-bottom:16px">${q.q}</div>${q.opts.map((opt,i)=>{let cls='quiz-option';if(answered){cls+=i===q.ans?' correct':quizState.answers[qIdx]===i?' wrong':' reveal';}return`<button class="${cls}" onclick="answerQuiz(${i})" ${answered?'disabled':''}>${opt}</button>`;}).join('')}${answered?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:10px;font-size:13px;color:var(--text3);line-height:1.5">💡 ${q.exp}</div>`:''}</div>${answered?`<button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="nextQuiz()">${qIdx+1<cat.questions.length?'Следующий →':'Завершить'}</button>`:''}<button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← Выйти</button>`;
 }
 function answerQuiz(i){if(quizState.answers[quizState.qIdx]!==undefined)return;quizState.answers[quizState.qIdx]=i;if(i===quizState.cat.questions[quizState.qIdx].ans)quizState.correct++;renderQuizQuestion();}
 function nextQuiz(){quizState.qIdx++;if(quizState.qIdx>=quizState.cat.questions.length)showQuizResult();else renderQuizQuestion();}
@@ -1047,7 +1116,7 @@ function showQuizResult(){
   const color=pct>=80?'#22c55e':pct>=50?'#f59e0b':'#ef4444';
   document.getElementById('quiz-question').style.display='none';
   const res=document.getElementById('quiz-result');res.style.display='block';
-  res.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px;margin-bottom:8px">${pct>=80?'🏆':pct>=50?'📚':'💪'}</div><div style="font-size:36px;font-weight:700;color:${color}">${pct}%</div><div style="font-size:15px;font-weight:600;margin-top:4px">${cat.cat}</div><div style="font-size:13px;color:#64748b;margin-top:4px">${correct} из ${total} правильных</div></div><button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="startQuiz(${QUIZ_DATA.indexOf(cat)})">Пройти снова</button><button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← К тестам</button>`;
+  res.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px;margin-bottom:8px">${pct>=80?'🏆':pct>=50?'📚':'💪'}</div><div style="font-size:36px;font-weight:700;color:${color}">${pct}%</div><div style="font-size:15px;font-weight:600;margin-top:4px">${cat.cat}</div><div style="font-size:13px;color:var(--text4);margin-top:4px">${correct} из ${total} правильных</div></div><button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="startQuiz(${QUIZ_DATA.indexOf(cat)})">Пройти снова</button><button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← К тестам</button>`;
 }
 
 // ===================== FLASHCARDS =====================
@@ -1055,7 +1124,7 @@ function renderFCCats(){document.getElementById('fc-cats').innerHTML=FLASHCARDS.
 function selectFCCat(cat){activeFCCat=cat;fcIdx=0;fcFlipped=false;renderFCCats();renderFC();}
 function renderFC(){
   const cat=FLASHCARDS.find(f=>f.cat===activeFCCat),card=cat.cards[fcIdx],total=cat.cards.length;
-  document.getElementById('fc-content').innerHTML=`<div style="text-align:right;font-size:12px;color:#64748b;margin-bottom:8px">${fcIdx+1} / ${total}</div><div class="flashcard" onclick="flipFC()"><div style="font-size:11px;color:#64748b;margin-bottom:8px">${fcFlipped?'Ответ':'Вопрос'}</div><div style="font-size:${fcFlipped?'14':'17'}px;font-weight:${fcFlipped?'400':'700'};line-height:1.5;color:${fcFlipped?'#94a3b8':'#f1f5f9'}">${fcFlipped?card.back:card.front}</div><div style="position:absolute;bottom:12px;right:14px;font-size:11px;color:#475569">нажми чтобы перевернуть</div></div><div style="display:flex;gap:10px;margin-top:12px"><button class="btn" style="flex:1" onclick="prevFC()">← Назад</button><button class="btn btn-primary" style="flex:1" onclick="nextFC()">Вперёд →</button></div><div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:${(fcIdx+1)/total*100}%;background:#38bdf8"></div></div>`;
+  document.getElementById('fc-content').innerHTML=`<div style="text-align:right;font-size:12px;color:var(--text4);margin-bottom:8px">${fcIdx+1} / ${total}</div><div class="flashcard" onclick="flipFC()"><div style="font-size:11px;color:var(--text4);margin-bottom:8px">${fcFlipped?'Ответ':'Вопрос'}</div><div style="font-size:${fcFlipped?'14':'17'}px;font-weight:${fcFlipped?'400':'700'};line-height:1.5;color:${fcFlipped?'#94a3b8':'#f1f5f9'}">${fcFlipped?card.back:card.front}</div><div style="position:absolute;bottom:12px;right:14px;font-size:11px;color:var(--text5)">нажми чтобы перевернуть</div></div><div style="display:flex;gap:10px;margin-top:12px"><button class="btn" style="flex:1" onclick="prevFC()">← Назад</button><button class="btn btn-primary" style="flex:1" onclick="nextFC()">Вперёд →</button></div><div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:${(fcIdx+1)/total*100}%;background:#38bdf8"></div></div>`;
 }
 function flipFC(){fcFlipped=!fcFlipped;renderFC();}
 function nextFC(){const cat=FLASHCARDS.find(f=>f.cat===activeFCCat);fcIdx=(fcIdx+1)%cat.cards.length;fcFlipped=false;renderFC();}
@@ -1065,7 +1134,7 @@ function prevFC(){const cat=FLASHCARDS.find(f=>f.cat===activeFCCat);fcIdx=(fcIdx
 function renderGlossary(){
   const q=(document.getElementById('glossary-search')||{}).value||'';
   const list=q?GLOSSARY.filter(g=>g.term.toLowerCase().includes(q.toLowerCase())||g.def.toLowerCase().includes(q.toLowerCase())):GLOSSARY;
-  document.getElementById('glossary-list').innerHTML=list.map(g=>{const open=openGlossaryTerm===g.term;return`<div class="list-item" onclick="toggleGlossary('${g.term}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-weight:600;font-size:14px;color:#38bdf8">${g.term}</div><span style="color:#475569;margin-left:8px">${open?'▲':'▼'}</span></div>${open?`<div style="font-size:13px;color:#94a3b8;margin-top:8px;line-height:1.5">${g.def}</div>`:''}</div>`;}).join('');
+  document.getElementById('glossary-list').innerHTML=list.map(g=>{const open=openGlossaryTerm===g.term;return`<div class="list-item" onclick="toggleGlossary('${g.term}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-weight:600;font-size:14px;color:var(--accent2)">${g.term}</div><span style="color:var(--text5);margin-left:8px">${open?'▲':'▼'}</span></div>${open?`<div style="font-size:13px;color:var(--text3);margin-top:8px;line-height:1.5">${g.def}</div>`:''}</div>`;}).join('');
 }
 function toggleGlossary(term){openGlossaryTerm=openGlossaryTerm===term?null:term;renderGlossary();}
 
@@ -1083,13 +1152,13 @@ function saveDiaryEntry(){
 }
 function renderDiary(){
   const cats=['Анестезия','Лечение кариеса','Лечение пульпита','Удаление зуба'];
-  document.getElementById('diary-stats').innerHTML=cats.map(c=>`<div class="stat-mini"><div style="font-size:20px">${{Анестезия:'💉','Лечение кариеса':'🦷','Лечение пульпита':'🔧','Удаление зуба':'✂️'}[c]||'📋'}</div><div style="font-size:18px;font-weight:700;color:#38bdf8">${diary.filter(d=>d.type===c).length}</div><div style="font-size:9px;color:#64748b;line-height:1.3">${c}</div></div>`).join('');
+  document.getElementById('diary-stats').innerHTML=cats.map(c=>`<div class="stat-mini"><div style="font-size:20px">${{Анестезия:'💉','Лечение кариеса':'🦷','Лечение пульпита':'🔧','Удаление зуба':'✂️'}[c]||'📋'}</div><div style="font-size:18px;font-weight:700;color:var(--accent)">${diary.filter(d=>d.type===c).length}</div><div style="font-size:9px;color:var(--text4);line-height:1.3">${c}</div></div>`).join('');
   const allCats=['Все',...new Set(diary.map(d=>d.type))];
   document.getElementById('diary-cats').innerHTML=allCats.map(c=>`<button class="cat-btn ${activeDiaryCat===c?'active':''}" onclick="selectDiaryCat('${c}')">${c}</button>`).join('');
   const filtered=activeDiaryCat==='Все'?diary:diary.filter(d=>d.type===activeDiaryCat);
   const el=document.getElementById('diary-list');
   if(!filtered.length){el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div><div>Нет записей</div></div>`;return;}
-  el.innerHTML=[...filtered].reverse().map(d=>`<div class="list-item"><div style="display:flex;justify-content:space-between"><div><div style="font-weight:600;font-size:14px">${d.type}${d.tooth?' (зуб '+d.tooth+')':''}</div><div style="font-size:12px;color:#64748b;margin-top:2px">${d.date?new Date(d.date).toLocaleDateString('ru',{day:'numeric',month:'long'}):''}${d.teacher?' · '+d.teacher:''}</div>${d.notes?`<div style="font-size:12px;color:#475569;margin-top:2px">${d.notes}</div>`:''}</div><button onclick="deleteDiary('${d.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px;flex-shrink:0">×</button></div></div>`).join('');
+  el.innerHTML=[...filtered].reverse().map(d=>`<div class="list-item"><div style="display:flex;justify-content:space-between"><div><div style="font-weight:600;font-size:14px">${d.type}${d.tooth?' (зуб '+d.tooth+')':''}</div><div style="font-size:12px;color:var(--text4);margin-top:2px">${d.date?new Date(d.date).toLocaleDateString('ru',{day:'numeric',month:'long'}):''}${d.teacher?' · '+d.teacher:''}</div>${d.notes?`<div style="font-size:12px;color:var(--text5);margin-top:2px">${d.notes}</div>`:''}</div><button onclick="deleteDiary('${d.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px;flex-shrink:0">×</button></div></div>`).join('');
 }
 function selectDiaryCat(cat){activeDiaryCat=cat;renderDiary();}
 function deleteDiary(id){diary=diary.filter(d=>d.id!==id);localStorage.setItem('da_diary',JSON.stringify(diary));renderDiary();}
@@ -1119,7 +1188,7 @@ function updateTimerDisplay(){
   if(timerTotal>0){const pct=timerLeft/timerTotal,circ=553,offset=circ*(1-pct);document.getElementById('timer-ring').style.strokeDashoffset=offset;const color=pct>0.5?'#0ea5e9':pct>0.2?'#f59e0b':'#ef4444';document.getElementById('timer-ring').style.stroke=color;}
 }
 function formatTime(s){return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
-function renderTimerLog(){const el=document.getElementById('timer-log');if(!timerLog.length){el.innerHTML='';return;}el.innerHTML=`<div class="label" style="margin-top:4px">История</div>`+timerLog.map(l=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid #1e293b"><span>✅ ${l.label}</span><span style="color:#64748b">${l.date}</span></div>`).join('');}
+function renderTimerLog(){const el=document.getElementById('timer-log');if(!timerLog.length){el.innerHTML='';return;}el.innerHTML=`<div class="label" style="margin-top:4px">История</div>`+timerLog.map(l=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border2)"><span>✅ ${l.label}</span><span style="color:var(--text4)">${l.date}</span></div>`).join('');}
 
 // ===================== SCHEDULE =====================
 function renderSchedule(){
@@ -1131,7 +1200,7 @@ function renderSchedule(){
   let html=hours.map(h=>{
     const timeStr=`${String(h).padStart(2,'0')}:00`;
     const entry=dayEntries.find(e=>e.time===timeStr);
-    if(entry)return`<div class="sched-slot busy"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14px">${entry.patient}</div><div style="font-size:12px;color:#64748b;margin-top:2px">⏰ ${entry.time} · ${entry.duration} мин · ${entry.proc||'—'}</div>${entry.note?`<div style="font-size:11px;color:#94a3b8;margin-top:2px">${entry.note}</div>`:''}</div><button onclick="deleteSchedEntry('${entry.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px">×</button></div></div>`;
+    if(entry)return`<div class="sched-slot busy"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14px">${entry.patient}</div><div style="font-size:12px;color:var(--text4);margin-top:2px">⏰ ${entry.time} · ${entry.duration} мин · ${entry.proc||'—'}</div>${entry.note?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${entry.note}</div>`:''}</div><button onclick="deleteSchedEntry('${entry.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px">×</button></div></div>`;
     return`<div class="sched-slot free"><span style="font-size:12px;color:#334155">${timeStr}</span></div>`;
   }).join('');
   document.getElementById('schedule-slots').innerHTML=html;
@@ -1207,7 +1276,7 @@ function renderDiagResults(){
   if(!scored.length){document.getElementById('diag-results').innerHTML=`<div class="empty"><div>Нет совпадающих диагнозов</div><div style="font-size:12px;margin-top:4px">Добавьте больше симптомов</div></div>`;return;}
   document.getElementById('diag-results').innerHTML=scored.map((d,i)=>{
     const pct=Math.round(d.matched/d.symptoms.length*100);
-    return`<div class="diag-result"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><span style="background:${d.color}22;color:${d.color};border:1px solid ${d.color}44;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:700">${d.code}</span><span style="font-size:15px;font-weight:700;margin-left:8px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${d.name}</span></div><span style="font-size:13px;color:${d.color};font-weight:700">${pct}%</span></div><div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div><div style="font-size:13px;color:#94a3b8;margin-bottom:6px">📋 ${d.tactics}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${d.drugs.map(dr=>`<span class="tag" style="background:#0ea5e922;color:#38bdf8;border:1px solid #0ea5e944;font-size:11px">💊 ${dr}</span>`).join('')}</div></div>`;
+    return`<div class="diag-result"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><span style="background:${d.color}22;color:${d.color};border:1px solid ${d.color}44;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:700">${d.code}</span><span style="font-size:15px;font-weight:700;margin-left:8px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${d.name}</span></div><span style="font-size:13px;color:${d.color};font-weight:700">${pct}%</span></div><div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div><div style="font-size:13px;color:var(--text3);margin-bottom:6px">📋 ${d.tactics}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${d.drugs.map(dr=>`<span class="tag" style="background:#0ea5e922;color:var(--accent2);border:1px solid #0ea5e944;font-size:11px">💊 ${dr}</span>`).join('')}</div></div>`;
   }).join('');
 }
 
@@ -1216,7 +1285,7 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
 function showToast(msg){
   let t=document.getElementById('toast');
-  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#334155;color:#f1f5f9;padding:9px 16px;border-radius:10px;font-size:13px;z-index:300;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s';document.body.appendChild(t);}
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--bg3);color:var(--text);padding:9px 16px;border-radius:10px;font-size:13px;z-index:300;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s';document.body.appendChild(t);}
   t.textContent=msg;t.style.opacity=1;clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity=0,2000);
 }
 
@@ -1230,6 +1299,25 @@ if('serviceWorker' in navigator){
   const sw=`const C='da-v3';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.add('/'))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
 }
+
+// ===================== THEME =====================
+let isDark = localStorage.getItem('da_theme') !== 'light';
+function applyTheme(){
+  const meta = document.getElementById('meta-theme-color');
+  if(isDark){
+    document.documentElement.classList.remove('light');
+    if(meta) meta.content = '#0f172a';
+  } else {
+    document.documentElement.classList.add('light');
+    if(meta) meta.content = '#f0f4f8';
+  }
+  localStorage.setItem('da_theme', isDark ? 'dark' : 'light');
+}
+function toggleTheme(){
+  isDark = !isDark;
+  applyTheme();
+}
+applyTheme();
 
 // Init
 updateHomeStats();
