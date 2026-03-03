@@ -22,23 +22,23 @@
 :root{
   --bg:#0f172a;
   --bg2:#1e293b;
-  --bg3:#0d1526;
-  --border:#334155;
-  --border2:#253347;
+  --bg3:#162032;
+  --border:#3d5068;
+  --border2:#2d3f52;
   --text:#f1f5f9;
-  --text2:#cbd5e1;
-  --text3:#94a3b8;
-  --text4:#64748b;
-  --text5:#475569;
-  --accent:#0ea5e9;
-  --accent2:#38bdf8;
-  --shadow:#0ea5e966;
-  --nav-bg:#1e293b;
-  --input-bg:#0d1526;
+  --text2:#e2e8f0;
+  --text3:#b8cad9;
+  --text4:#8fa8bf;
+  --text5:#6b8599;
+  --accent:#38bdf8;
+  --accent2:#7dd3fc;
+  --shadow:#38bdf866;
+  --nav-bg:#1a2840;
+  --input-bg:#162032;
   --modal-bg:#1e293b;
-  --card-bg:#1e293b;
+  --card-bg:#1e2d40;
   --overlay:#00000099;
-  --handle:#334155;
+  --handle:#3d5068;
 }
 html.light{
   --bg:#f0f4f8;
@@ -143,10 +143,7 @@ html.light .quiz-option.correct{color:#15803d}
 .timer-ring{transition:stroke-dashoffset .5s linear}
 .timer-btn{width:64px;height:64px;border-radius:20px;border:none;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .15s}
 .timer-btn:active{transform:scale(.93)}
-.ai-bubble{padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.6;max-width:90%;margin-bottom:10px}
-.ai-bubble.user{background:var(--accent);color:#fff;margin-left:auto;border-radius:16px 16px 4px 16px}
-.ai-bubble.bot{background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:16px 16px 16px 4px}
-.ai-bubble.thinking{animation:pulse 1.2s infinite}
+
 .sched-slot{padding:10px 12px;border-radius:10px;margin-bottom:6px;border-left:3px solid transparent;cursor:pointer}
 .sched-slot.busy{background:#0ea5e922;border-left-color:var(--accent)}
 .sched-slot.free{background:var(--input-bg);border:1px solid var(--border2);border-left:3px solid var(--border)}
@@ -184,7 +181,7 @@ html.light .drug-item .text-dose{color:#0369a1}
         <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Переключить тему"></button>
         <span style="font-size:13px">☀️</span>
       </div>
-      <div id="home-date" style="font-size:12px;color:var(--text4)"></div>
+      <div id="home-date" style="font-size:12px;color:var(--text3)"></div>
     </div>
   </div>
   <div class="grid3" style="margin:14px 0">
@@ -197,8 +194,8 @@ html.light .drug-item .text-dose{color:#0369a1}
     <button class="list-item" onclick="showPage('patients')" style="display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:6px">
       <div style="font-size:28px">👤</div><div style="font-weight:600;font-size:13px">Пациенты</div>
     </button>
-    <button class="list-item" onclick="showPage('ai')" style="display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:6px;border-color:#f97316;background:linear-gradient(135deg,#f9731611,#0f172a)">
-      <div style="font-size:28px">🤖</div><div style="font-weight:600;font-size:13px">AI Диагностика</div><div style="font-size:10px;color:#f97316">НОВОЕ</div>
+    <button class="list-item" onclick="showPage('top30')" style="display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:6px;border-color:#f97316;background:linear-gradient(135deg,#f9731611,var(--bg))">
+      <div style="font-size:28px">🏆</div><div style="font-weight:600;font-size:13px">ТОП-30 случаев</div><div style="font-size:10px;color:#f97316">НОВОЕ</div>
     </button>
     <button class="list-item" onclick="showPage('diffdiag')" style="display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:6px">
       <div style="font-size:28px">🔍</div><div style="font-weight:600;font-size:13px">Дифф. диагноз</div>
@@ -271,28 +268,22 @@ html.light .drug-item .text-dose{color:#0369a1}
   <div id="detail-content"></div>
 </div>
 
-<!-- AI DIAGNOSTICS -->
-<div id="page-ai" class="page">
+<!-- TOP 30 CASES -->
+<div id="page-top30" class="page">
   <div class="row-header">
     <button class="btn back-btn" onclick="showPage('home')">‹</button>
-    <h2>🤖 AI Диагностика</h2>
+    <h2>🏆 ТОП-30 случаев</h2>
   </div>
-  <div class="card" style="border-color:#f9731644;background:linear-gradient(135deg,#f9731608,#1e293b)">
-    <div style="font-size:13px;color:var(--text3);line-height:1.6">Опишите симптомы пациента — AI предложит дифференциальный диагноз, тактику лечения и препараты. Не заменяет клическое суждение врача.</div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input id="top30-search" placeholder="Симптом или диагноз..." oninput="renderTop30()"/></div>
+  <div class="cats" id="top30-cats"></div>
+  <div id="top30-list"></div>
+</div>
+<div id="page-top30-detail" class="page">
+  <div class="row-header">
+    <button class="btn back-btn" onclick="showPage('top30')">‹</button>
+    <h2 id="top30-detail-title" style="font-size:16px;line-height:1.3"></h2>
   </div>
-  <div id="ai-chat" style="min-height:200px;margin-bottom:12px"></div>
-  <div style="display:flex;gap:8px;margin-bottom:10px">
-    <input id="ai-input" placeholder="Опишите симптомы..." style="flex:1" onkeydown="if(event.key==='Enter')sendAI()"/>
-    <button class="btn btn-primary" style="padding:11px 16px;flex-shrink:0" onclick="sendAI()">→</button>
-  </div>
-  <div class="label">Быстрые шаблоны</div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px">
-    <button class="cat-btn" onclick="setAITemplate('Острая самопроизвольная ночная боль, усиливается от тепла, холод успокаивает')">Острая боль ночью</button>
-    <button class="cat-btn" onclick="setAITemplate('Боль при накусывании, отёк десны, свищ, зуб депульпирован ранее')">Боль при накусывании</button>
-    <button class="cat-btn" onclick="setAITemplate('Кровоточивость дёсен при чистке, отёк, покраснение, запах изо рта')">Кровоточивость дёсен</button>
-    <button class="cat-btn" onclick="setAITemplate('Боль от холодного и сладкого, проходит быстро, кариозная полость')">Боль от сладкого</button>
-    <button class="cat-btn" onclick="setAITemplate('Абсцесс в области нижней челюсти, флюктуация, температура 38°')">Абсцесс с флюктуацией</button>
-  </div>
+  <div id="top30-detail-content"></div>
 </div>
 
 <!-- DIFF DIAGNOSIS -->
@@ -324,7 +315,7 @@ html.light .drug-item .text-dose{color:#0369a1}
       </svg>
       <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
         <div id="timer-display" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums">00:00</div>
-        <div id="timer-label" style="font-size:13px;color:var(--text4);margin-top:2px">Выберите процедуру</div>
+        <div id="timer-label" style="font-size:13px;color:var(--text3);margin-top:2px">Выберите процедуру</div>
       </div>
     </div>
     <div style="display:flex;justify-content:center;gap:12px">
@@ -539,7 +530,7 @@ html.light .drug-item .text-dose{color:#0369a1}
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-home" onclick="showPage('home')"><span class="nav-icon">🏠</span>Главная</button>
   <button class="nav-btn" id="nav-patients" onclick="showPage('patients')"><span class="nav-icon">👤</span>Пациенты</button>
-  <button class="nav-btn" id="nav-ai" onclick="showPage('ai')"><span class="nav-icon">🤖</span>AI</button>
+  <button class="nav-btn" id="nav-top30" onclick="showPage('top30')"><span class="nav-icon">🏆</span>ТОП-30</button>
   <button class="nav-btn" id="nav-quiz" onclick="showPage('quiz')"><span class="nav-icon">🧠</span>Тесты</button>
   <button class="nav-btn" id="nav-diary" onclick="showPage('diary')"><span class="nav-icon">📝</span>Дневник</button>
 </div>
@@ -626,8 +617,8 @@ const PROTOCOLS=[
 ];
 
 const ATLAS_DATA=[
-  {cat:"Строение зуба",content:`<div class="card"><div class="label">Схема строения зуба</div><svg viewBox="0 0 280 340" style="width:100%;max-width:280px;display:block;margin:0 auto 12px"><defs><linearGradient id="en" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#cbd5e1"/></linearGradient><linearGradient id="de" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient><linearGradient id="pu" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fca5a5"/><stop offset="100%" stop-color="#f87171"/></linearGradient><linearGradient id="ce" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#4ade80"/></linearGradient></defs><path d="M100,20 Q80,10 70,40 Q60,80 65,120 L215,120 Q220,80 210,40 Q200,10 180,20 Q160,5 140,8 Q120,5 100,20Z" fill="url(#en)" stroke="#94a3b8" stroke-width="1.5"/><path d="M108,28 Q90,22 83,48 Q75,82 79,116 L201,116 Q205,82 197,48 Q190,22 172,28 Q158,16 140,19 Q122,16 108,28Z" fill="url(#de)"/><path d="M125,45 Q115,55 114,80 Q113,100 115,116 L165,116 Q167,100 166,80 Q165,55 155,45 Q148,35 140,36 Q132,35 125,45Z" fill="url(#pu)"/><path d="M79,116 Q72,160 68,200 Q65,240 75,280 Q85,300 100,290 Q115,280 118,250 Q120,230 120,200 L115,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M201,116 Q208,160 212,200 Q215,240 205,280 Q195,300 180,290 Q165,280 162,250 Q160,230 160,200 L165,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M114,116 Q110,150 107,185 Q104,220 110,265 Q114,280 120,278 Q126,270 124,250 Q122,225 122,200 L120,116Z" fill="url(#pu)"/><path d="M165,116 Q168,150 172,185 Q175,220 170,265 Q166,280 160,278 Q154,270 156,250 Q158,225 158,200 L160,116Z" fill="url(#pu)"/><line x1="65" y1="120" x2="215" y2="120" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/><text x="228" y="55" fill="#e2e8f0" font-size="11" font-family="system-ui">Эмаль</text><text x="228" y="85" fill="#fbbf24" font-size="11" font-family="system-ui">Дентин</text><text x="228" y="112" fill="#f87171" font-size="11" font-family="system-ui">Пульпа</text><text x="228" y="128" fill="#94a3b8" font-size="10" font-family="system-ui">ЦЭС</text><text x="228" y="170" fill="#4ade80" font-size="11" font-family="system-ui">Цемент</text><text x="228" y="240" fill="#fbbf24" font-size="11" font-family="system-ui">Корень</text><text x="228" y="285" fill="#f87171" font-size="11" font-family="system-ui">Канал</text><line x1="215" y1="52" x2="226" y2="52" stroke="#94a3b8" stroke-width="1"/><line x1="200" y1="82" x2="226" y2="82" stroke="#94a3b8" stroke-width="1"/><line x1="165" y1="109" x2="226" y2="109" stroke="#94a3b8" stroke-width="1"/></svg><div style="display:flex;flex-direction:column;gap:6px">${[{color:"#e2e8f0",name:"Эмаль",desc:"Самая твёрдая ткань организма (97% минералов). Не восстанавливается"},{color:"#fbbf24",name:"Дентин",desc:"70% минералов. Пронизан дентинными канальцами. Чувствителен к раздражителям"},{color:"#f87171",name:"Пульпа",desc:"Рыхлая соединительная ткань: нервы, сосуды. Питает и защищает зуб"},{color:"#4ade80",name:"Цемент",desc:"Покрывает корень. Место прикрепления периодонтальных волокон"}].map(i=>`<div class="anatomy-label"><div class="anatomy-dot" style="background:${i.color}"></div><div><b style="font-size:13px">${i.name}</b><div style="font-size:12px;color:var(--text4)">${i.desc}</div></div></div>`).join('')}</div></div>`},
-  {cat:"Типы зубов",content:`<div class="card"><div class="label">Группы зубов</div>${[{icon:"🦷",name:"Резцы (1-2)",f:"11,12,21,22 / 31,32,41,42",func:"Откусывание",roots:"1 корень",canals:"1 канал"},{icon:"🦷",name:"Клыки (3)",f:"13,23/33,43",func:"Разрывание",roots:"1 корень (самый длинный)",canals:"1 канал"},{icon:"🦷",name:"Премоляры (4-5)",f:"14,15,24,25/34,35,44,45",func:"Размельчение",roots:"1–2 корня",canals:"1–3 канала"},{icon:"🦷",name:"Моляры (6-7-8)",f:"16,17,18/36,37,38",func:"Перетирание",roots:"В/ч: 3 корня. Н/ч: 2 корня",canals:"3–4 канала"}].map(t=>`<div style="background:var(--input-bg);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--border2)"><div style="font-weight:600;font-size:14px;margin-bottom:4px">${t.icon} ${t.name}</div><div style="font-size:12px;color:var(--accent2);margin-bottom:4px">${t.f}</div><div style="font-size:12px;color:var(--text3)">⚡ ${t.func} · 🌿 ${t.roots} · ${t.canals}</div></div>`).join('')}</div>`},
+  {cat:"Строение зуба",content:`<div class="card"><div class="label">Схема строения зуба</div><svg viewBox="0 0 280 340" style="width:100%;max-width:280px;display:block;margin:0 auto 12px"><defs><linearGradient id="en" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#cbd5e1"/></linearGradient><linearGradient id="de" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fde68a"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient><linearGradient id="pu" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#fca5a5"/><stop offset="100%" stop-color="#f87171"/></linearGradient><linearGradient id="ce" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#4ade80"/></linearGradient></defs><path d="M100,20 Q80,10 70,40 Q60,80 65,120 L215,120 Q220,80 210,40 Q200,10 180,20 Q160,5 140,8 Q120,5 100,20Z" fill="url(#en)" stroke="#94a3b8" stroke-width="1.5"/><path d="M108,28 Q90,22 83,48 Q75,82 79,116 L201,116 Q205,82 197,48 Q190,22 172,28 Q158,16 140,19 Q122,16 108,28Z" fill="url(#de)"/><path d="M125,45 Q115,55 114,80 Q113,100 115,116 L165,116 Q167,100 166,80 Q165,55 155,45 Q148,35 140,36 Q132,35 125,45Z" fill="url(#pu)"/><path d="M79,116 Q72,160 68,200 Q65,240 75,280 Q85,300 100,290 Q115,280 118,250 Q120,230 120,200 L115,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M201,116 Q208,160 212,200 Q215,240 205,280 Q195,300 180,290 Q165,280 162,250 Q160,230 160,200 L165,116Z" fill="url(#de)" stroke="#94a3b8" stroke-width="1.5"/><path d="M114,116 Q110,150 107,185 Q104,220 110,265 Q114,280 120,278 Q126,270 124,250 Q122,225 122,200 L120,116Z" fill="url(#pu)"/><path d="M165,116 Q168,150 172,185 Q175,220 170,265 Q166,280 160,278 Q154,270 156,250 Q158,225 158,200 L160,116Z" fill="url(#pu)"/><line x1="65" y1="120" x2="215" y2="120" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/><text x="228" y="55" fill="#cfe0f0" font-size="11" font-family="system-ui">Эмаль</text><text x="228" y="85" fill="#fbbf24" font-size="11" font-family="system-ui">Дентин</text><text x="228" y="112" fill="#f87171" font-size="11" font-family="system-ui">Пульпа</text><text x="228" y="128" fill="#8fafc4" font-size="10" font-family="system-ui">ЦЭС</text><text x="228" y="170" fill="#4ade80" font-size="11" font-family="system-ui">Цемент</text><text x="228" y="240" fill="#fbbf24" font-size="11" font-family="system-ui">Корень</text><text x="228" y="285" fill="#f87171" font-size="11" font-family="system-ui">Канал</text><line x1="215" y1="52" x2="226" y2="52" stroke="#94a3b8" stroke-width="1"/><line x1="200" y1="82" x2="226" y2="82" stroke="#94a3b8" stroke-width="1"/><line x1="165" y1="109" x2="226" y2="109" stroke="#94a3b8" stroke-width="1"/></svg><div style="display:flex;flex-direction:column;gap:6px">${[{color:"#e2e8f0",name:"Эмаль",desc:"Самая твёрдая ткань организма (97% минералов). Не восстанавливается"},{color:"#fbbf24",name:"Дентин",desc:"70% минералов. Пронизан дентинными канальцами. Чувствителен к раздражителям"},{color:"#f87171",name:"Пульпа",desc:"Рыхлая соединительная ткань: нервы, сосуды. Питает и защищает зуб"},{color:"#4ade80",name:"Цемент",desc:"Покрывает корень. Место прикрепления периодонтальных волокон"}].map(i=>`<div class="anatomy-label"><div class="anatomy-dot" style="background:${i.color}"></div><div><b style="font-size:13px">${i.name}</b><div style="font-size:12px;color:var(--text3)">${i.desc}</div></div></div>`).join('')}</div></div>`},
+  {cat:"Типы зубов",content:`<div class="card"><div class="label">Группы зубов</div>${[{icon:"🦷",name:"Резцы (1-2)",f:"11,12,21,22 / 31,32,41,42",func:"Откусывание",roots:"1 корень",canals:"1 канал"},{icon:"🦷",name:"Клыки (3)",f:"13,23/33,43",func:"Разрывание",roots:"1 корень (самый длинный)",canals:"1 канал"},{icon:"🦷",name:"Премоляры (4-5)",f:"14,15,24,25/34,35,44,45",func:"Размельчение",roots:"1–2 корня",canals:"1–3 канала"},{icon:"🦷",name:"Моляры (6-7-8)",f:"16,17,18/36,37,38",func:"Перетирание",roots:"В/ч: 3 корня. Н/ч: 2 корня",canals:"3–4 канала"}].map(t=>`<div style="background:var(--input-bg);border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid var(--border2)"><div style="font-weight:600;font-size:14px;margin-bottom:4px">${t.icon} ${t.name}</div><div style="font-size:12px;color:var(--accent2);margin-bottom:4px">${t.f}</div><div style="font-size:12px;color:var(--text2)">⚡ ${t.func} · 🌿 ${t.roots} · ${t.canals}</div></div>`).join('')}</div>`},
   {cat:"Прорезывание",content:`<div class="card"><div class="label">Молочные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th><th style="padding:5px 4px">Смена</th></tr>${[["Центр. резцы","6–8 мес","7–9 мес","6–8 лет"],["Бок. резцы","9–12 мес","9–11 мес","7–9 лет"],["Клыки","16–20 мес","16–20 мес","10–12 лет"],["1-е моляры","12–16 мес","14–18 мес","9–11 лет"],["2-е моляры","20–30 мес","24–30 мес","10–12 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:var(--accent2);text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td><td style="padding:6px 4px;color:#22c55e;text-align:center">${r[3]}</td></tr>`).join('')}</table></div></div><div class="card"><div class="label">Постоянные зубы</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr style="color:var(--text4)"><th style="padding:5px 4px;text-align:left">Зуб</th><th style="padding:5px 4px">Нижняя</th><th style="padding:5px 4px">Верхняя</th></tr>${[["Центр. резцы","6–7 лет","7–8 лет"],["Бок. резцы","7–8 лет","8–9 лет"],["Клыки","9–11 лет","11–13 лет"],["1-е премоляры","10–12 лет","10–11 лет"],["2-е премоляры","11–13 лет","10–12 лет"],["1-е моляры","6–7 лет","6–7 лет"],["2-е моляры","12–13 лет","12–13 лет"],["Зубы мудрости","17–25 лет","17–25 лет"]].map((r,i)=>`<tr style="background:${i%2?'#0f172a':'transparent'}"><td style="padding:6px 4px">${r[0]}</td><td style="padding:6px 4px;color:var(--accent2);text-align:center">${r[1]}</td><td style="padding:6px 4px;color:#a78bfa;text-align:center">${r[2]}</td></tr>`).join('')}</table></div></div>`},
 ];
 
@@ -792,8 +783,7 @@ let openGlossaryTerm=null;
 let timerInterval=null,timerTotal=0,timerLeft=0,timerLabel="",timerLog=[];
 // Schedule
 let schedDate=new Date();
-// AI
-let aiHistory=[];
+
 // Diff diag
 let selectedSymptoms=new Set();
 
@@ -814,7 +804,7 @@ function showPage(id){
     quiz:renderQuizHome,flashcards:()=>{renderFCCats();renderFC();},
     glossary:renderGlossary,norms:()=>{renderNormsCats();renderNorms();},
     diary:renderDiary,timer:initTimer,schedule:renderSchedule,
-    ai:initAI,diffdiag:initDiffDiag,
+    top30:()=>{renderTop30Cats();renderTop30();},diffdiag:initDiffDiag,
   };
   if(inits[id])inits[id]();
 }
@@ -858,11 +848,11 @@ function renderPatients(){
         <div class="avatar" style="background:#0ea5e922;border:1px solid #0ea5e944;font-size:16px">👤</div>
         <div style="flex:1;min-width:0">
           <div style="font-weight:600;font-size:15px">${p.name}</div>
-          <div style="font-size:12px;color:var(--text4);margin-top:1px">${age?age+' лет':''}${p.phone?' · '+p.phone:''}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:1px">${age?age+' лет':''}${p.phone?' · '+p.phone:''}</div>
           ${p.allergy?`<div style="font-size:11px;color:#ef4444">⚠️ ${p.allergy}</div>`:''}
           ${total?`<div style="margin-top:4px"><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:${done/total*100}%;background:#22c55e"></div></div><div style="font-size:10px;color:var(--text4);margin-top:2px">${done}/${total} процедур</div></div>`:''}
         </div>
-        <div style="color:#334155;font-size:20px">›</div>
+        <div style="color:var(--text5);font-size:20px">›</div>
       </div>
     </div>`;
   }).join('');
@@ -890,7 +880,7 @@ function openPatientDetail(id){
     </div>
     ${p.complaints||p.diagnosis?`<div class="card">
       ${p.diagnosis?`<div style="margin-bottom:${p.complaints?'10px':'0'}"><div class="label">Диагноз</div><div style="font-size:14px">${p.diagnosis}</div></div>`:''}
-      ${p.complaints?`<div><div class="label">Жалобы</div><div style="font-size:13px;color:var(--text3);line-height:1.5">${p.complaints}</div></div>`:''}
+      ${p.complaints?`<div><div class="label">Жалобы</div><div style="font-size:13px;color:var(--text2);line-height:1.5">${p.complaints}</div></div>`:''}
     </div>`:''}
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div class="label" style="margin:0">План лечения</div>
@@ -905,7 +895,7 @@ function openPatientDetail(id){
       ${plans.map((pl,i)=>`<div class="treatment-step">
         <div class="step-check ${pl.done?'done':''}" onclick="togglePlan('${p.id}',${i})">${pl.done?'✓':''}</div>
         <div style="flex:1"><div style="font-size:14px;${pl.done?'text-decoration:line-through;color:var(--text5)':''}">${pl.proc}</div>
-          <div style="font-size:12px;color:var(--text4)">${pl.tooth?'Зуб '+pl.tooth+' · ':''}${pl.cost?parseInt(pl.cost).toLocaleString()+' ₽':''}</div>
+          <div style="font-size:12px;color:var(--text3)">${pl.tooth?'Зуб '+pl.tooth+' · ':''}${pl.cost?parseInt(pl.cost).toLocaleString()+' ₽':''}</div>
         </div>
         <button onclick="deletePlan('${p.id}',${i})" style="background:none;border:none;color:var(--text5);cursor:pointer;font-size:18px;padding:0 4px">×</button>
       </div>`).join('')}
@@ -916,7 +906,7 @@ function openPatientDetail(id){
     </div>
     ${visits.length?`<div class="card" style="padding:8px 14px">
       ${[...visits].reverse().map(v=>`<div style="padding:8px 0;border-bottom:1px solid var(--bg3)">
-        <div style="font-size:12px;color:var(--text4)">${new Date(v.date).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</div>
+        <div style="font-size:12px;color:var(--text3)">${new Date(v.date).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</div>
         <div style="font-size:13px;color:var(--text3);margin-top:2px;line-height:1.4">${v.note}</div>
       </div>`).join('')}
     </div>`:`<div class="card" style="text-align:center;color:var(--text5);font-size:13px;padding:18px">Нет записей</div>`}`;
@@ -1033,7 +1023,7 @@ function renderDrugs(){
     if(!items.length)return;
     if(q)html+=`<div class="label" style="margin-bottom:6px">${cat.icon} ${cat.cat}</div>`;
     items.forEach((drug,i)=>{const key=cat.cat+i,open=activeDrug===key;
-      html+=`<div class="drug-item" onclick="toggleDrug('${key}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:600;font-size:14px">${drug.name}</div><div style="font-size:13px;color:var(--accent);font-weight:600;margin-top:3px">${drug.dose}</div></div><span style="color:var(--text5)">${open?'▲':'▼'}</span></div>${open?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:8px;font-size:13px;color:var(--text3);line-height:1.5">📝 ${drug.note}</div>`:''}</div>`;
+      html+=`<div class="drug-item" onclick="toggleDrug('${key}')"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:600;font-size:14px">${drug.name}</div><div style="font-size:13px;color:var(--accent);font-weight:600;margin-top:3px">${drug.dose}</div></div><span style="color:var(--text5)">${open?'▲':'▼'}</span></div>${open?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:8px;font-size:13px;color:var(--text2);line-height:1.5">📝 ${drug.note}</div>`:''}</div>`;
     });
   });
   document.getElementById('drug-list').innerHTML=html;
@@ -1051,10 +1041,10 @@ function calcDose(){
   const coef=isAdult?1:0.5;
   if(d.isAnest){
     const maxMg=d.maxMg*w*coef,maxC=Math.floor(maxMg/d.mgPerCarp*10)/10,recC=Math.min(maxC,isAdult?4:2);
-    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. доза</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxMg)}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. карпул</div><div style="font-size:24px;font-weight:700;color:#22c55e">${maxC}<span style="font-size:13px;color:var(--text4)"> карп.</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ Рекомендуется: <b>${recC} карп.</b> = ${Math.round(recC*d.mgPerCarp)} мг</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} мг/кг × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxMg)} мг ÷ ${d.mgPerCarp} = <b>${maxC} карп.</b></div></div>`;
+    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. доза</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxMg)}<span style="font-size:13px;color:var(--text3)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс. карпул</div><div style="font-size:24px;font-weight:700;color:#22c55e">${maxC}<span style="font-size:13px;color:var(--text3)"> карп.</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ Рекомендуется: <b>${recC} карп.</b> = ${Math.round(recC*d.mgPerCarp)} мг</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} мг/кг × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxMg)} мг ÷ ${d.mgPerCarp} = <b>${maxC} карп.</b></div></div>`;
   }else{
     const maxDay=d.maxMg*w*coef,perDose=Math.round(maxDay/d.perDose),tabs=Math.round(perDose/d.tabMg*10)/10;
-    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс./сутки</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxDay)}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Разовая доза</div><div style="font-size:24px;font-weight:700;color:#22c55e">${perDose}<span style="font-size:13px;color:var(--text4)"> мг</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ ${tabs} табл. ${d.tabMg}мг × ${d.perDose} р/сут</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} ${d.unit} × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxDay)} мг/сут ÷ ${d.perDose} = <b>${perDose} мг/приём</b></div></div>`;
+    el.innerHTML=`<div class="card"><div class="label">Результат · ${d.name}</div><div class="grid2" style="margin-bottom:12px"><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Макс./сутки</div><div style="font-size:24px;font-weight:700;color:var(--accent)">${Math.round(maxDay)}<span style="font-size:13px;color:var(--text3)"> мг</span></div></div><div style="text-align:center;background:var(--input-bg);border-radius:10px;padding:12px;border:1px solid var(--border)"><div style="font-size:11px;color:var(--text4);margin-bottom:4px">Разовая доза</div><div style="font-size:24px;font-weight:700;color:#22c55e">${perDose}<span style="font-size:13px;color:var(--text3)"> мг</span></div></div></div><div style="padding:10px;background:#22c55e11;border-radius:10px;border:1px solid #22c55e33;font-size:13px;color:#22c55e;text-align:center;margin-bottom:10px">✅ ${tabs} табл. ${d.tabMg}мг × ${d.perDose} р/сут</div><div style="font-size:12px;color:var(--text5)">${d.maxMg} ${d.unit} × ${w} кг${!isAdult?' × 0.5':''} = ${Math.round(maxDay)} мг/сут ÷ ${d.perDose} = <b>${perDose} мг/приём</b></div></div>`;
   }
 }
 
@@ -1069,7 +1059,7 @@ function renderMKB(){
     const items=q?cat.items.filter(d=>d.code.toLowerCase().includes(q.toLowerCase())||d.name.toLowerCase().includes(q.toLowerCase())):(activeMKBCat===cat.cat?cat.items:[]);
     if(!items.length)return;
     if(q)html+=`<div class="label" style="margin-bottom:6px">${cat.cat}</div>`;
-    items.forEach(item=>{html+=`<div class="mkb-item list-item" onclick="copyMKB('${item.code}','${item.name.replace(/'/g,"\\'")}')"><div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf633;padding:3px 7px;border-radius:6px;font-size:12px;font-weight:700;flex-shrink:0">${item.code}</span><div><div style="font-weight:600;font-size:14px">${item.name}</div>${item.desc?`<div style="font-size:12px;color:var(--text4);margin-top:2px">${item.desc}</div>`:''}</div></div></div>`;});
+    items.forEach(item=>{html+=`<div class="mkb-item list-item" onclick="copyMKB('${item.code}','${item.name.replace(/'/g,"\\'")}')"><div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf633;padding:3px 7px;border-radius:6px;font-size:12px;font-weight:700;flex-shrink:0">${item.code}</span><div><div style="font-weight:600;font-size:14px">${item.name}</div>${item.desc?`<div style="font-size:12px;color:var(--text3);margin-top:2px">${item.desc}</div>`:''}</div></div></div>`;});
   });
   document.getElementById('mkb-list').innerHTML=html||`<div class="empty">Ничего не найдено</div>`;
 }
@@ -1080,12 +1070,12 @@ function renderProtoCats(){document.getElementById('proto-cats').innerHTML=PROTO
 function selectProtoCat(cat){activeProtoCat=cat;renderProtoCats();renderProtos();}
 function renderProtos(){
   const cat=PROTOCOLS.find(p=>p.cat===activeProtoCat);
-  document.getElementById('proto-list').innerHTML=cat.items.map((item,i)=>`<div class="list-item" onclick="showProto(${PROTOCOLS.indexOf(cat)},${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:#0ea5e922;border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${cat.icon}</div><div><div style="font-weight:600;font-size:14px">${item.title}</div><div style="font-size:12px;color:var(--text4)">${item.steps.length} шагов</div></div><div style="margin-left:auto;color:#334155;font-size:20px">›</div></div></div>`).join('');
+  document.getElementById('proto-list').innerHTML=cat.items.map((item,i)=>`<div class="list-item" onclick="showProto(${PROTOCOLS.indexOf(cat)},${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:10px;background:#0ea5e922;border:1px solid #0ea5e944;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${cat.icon}</div><div><div style="font-weight:600;font-size:14px">${item.title}</div><div style="font-size:12px;color:var(--text3)">${item.steps.length} шагов</div></div><div style="margin-left:auto;color:var(--text5);font-size:20px">›</div></div></div>`).join('');
 }
 function showProto(ci,ii){
   const item=PROTOCOLS[ci].items[ii];
   document.getElementById('proto-detail-title').textContent=item.title;
-  document.getElementById('proto-detail-content').innerHTML=`<div class="card">${item.steps.map(s=>`<div class="proto-step"><div class="proto-num">${s.n}</div><div style="font-size:14px;color:var(--text3);line-height:1.5;flex:1">${s.text}</div></div>`).join('')}</div>`;
+  document.getElementById('proto-detail-content').innerHTML=`<div class="card">${item.steps.map(s=>`<div class="proto-step"><div class="proto-num">${s.n}</div><div style="font-size:14px;color:var(--text2);line-height:1.6;flex:1">${s.text}</div></div>`).join('')}</div>`;
   showPage('protocol-detail');
 }
 
@@ -1099,14 +1089,14 @@ function renderQuizHome(){
   document.getElementById('quiz-home').style.display='block';
   document.getElementById('quiz-question').style.display='none';
   document.getElementById('quiz-result').style.display='none';
-  document.getElementById('quiz-home').innerHTML=`<div class="card" style="margin-bottom:16px"><div class="label">Твои результаты</div>${QUIZ_DATA.map(cat=>{const sc=quizScores[cat.cat]||0,color=sc>=80?'#22c55e':sc>=50?'#f59e0b':'#ef4444';return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${cat.icon} ${cat.cat}</span><span style="color:${color};font-weight:600">${sc}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${sc}%;background:${color}"></div></div></div>`;}).join('')}</div>${QUIZ_DATA.map((cat,i)=>`<div class="list-item" onclick="startQuiz(${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:12px;background:#a78bfa22;border:1px solid #a78bfa44;display:flex;align-items:center;justify-content:center;font-size:20px">${cat.icon}</div><div><div style="font-weight:600;font-size:15px">${cat.cat}</div><div style="font-size:12px;color:var(--text4)">${cat.questions.length} вопросов</div></div><div style="margin-left:auto;color:${quizScores[cat.cat]>=80?'#22c55e':'#334155'};font-size:20px">${quizScores[cat.cat]>=80?'✓':'›'}</div></div></div>`).join('')}`;
+  document.getElementById('quiz-home').innerHTML=`<div class="card" style="margin-bottom:16px"><div class="label">Твои результаты</div>${QUIZ_DATA.map(cat=>{const sc=quizScores[cat.cat]||0,color=sc>=80?'#22c55e':sc>=50?'#f59e0b':'#ef4444';return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${cat.icon} ${cat.cat}</span><span style="color:${color};font-weight:600">${sc}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${sc}%;background:${color}"></div></div></div>`;}).join('')}</div>${QUIZ_DATA.map((cat,i)=>`<div class="list-item" onclick="startQuiz(${i})"><div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:12px;background:#a78bfa22;border:1px solid #a78bfa44;display:flex;align-items:center;justify-content:center;font-size:20px">${cat.icon}</div><div><div style="font-weight:600;font-size:15px">${cat.cat}</div><div style="font-size:12px;color:var(--text3)">${cat.questions.length} вопросов</div></div><div style="margin-left:auto;color:${quizScores[cat.cat]>=80?'#22c55e':'#334155'};font-size:20px">${quizScores[cat.cat]>=80?'✓':'›'}</div></div></div>`).join('')}`;
 }
 function startQuiz(ci){quizState={ci,qIdx:0,correct:0,answers:[],cat:QUIZ_DATA[ci]};renderQuizQuestion();}
 function renderQuizQuestion(){
   document.getElementById('quiz-home').style.display='none';document.getElementById('quiz-result').style.display='none';
   const qs=document.getElementById('quiz-question');qs.style.display='block';
   const{cat,qIdx,correct}=quizState,q=cat.questions[qIdx],answered=quizState.answers[qIdx]!==undefined;
-  qs.innerHTML=`<div class="card" style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:var(--text4)">${qIdx+1} / ${cat.questions.length}</div><div style="font-size:12px;color:#22c55e">✓ ${correct}</div></div><div class="progress-bar" style="margin-bottom:14px"><div class="progress-fill" style="width:${qIdx/cat.questions.length*100}%;background:#0ea5e9"></div></div><div style="font-size:15px;font-weight:600;line-height:1.5;margin-bottom:16px">${q.q}</div>${q.opts.map((opt,i)=>{let cls='quiz-option';if(answered){cls+=i===q.ans?' correct':quizState.answers[qIdx]===i?' wrong':' reveal';}return`<button class="${cls}" onclick="answerQuiz(${i})" ${answered?'disabled':''}>${opt}</button>`;}).join('')}${answered?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:10px;font-size:13px;color:var(--text3);line-height:1.5">💡 ${q.exp}</div>`:''}</div>${answered?`<button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="nextQuiz()">${qIdx+1<cat.questions.length?'Следующий →':'Завершить'}</button>`:''}<button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← Выйти</button>`;
+  qs.innerHTML=`<div class="card" style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:12px;color:var(--text3)">${qIdx+1} / ${cat.questions.length}</div><div style="font-size:12px;color:#22c55e">✓ ${correct}</div></div><div class="progress-bar" style="margin-bottom:14px"><div class="progress-fill" style="width:${qIdx/cat.questions.length*100}%;background:#0ea5e9"></div></div><div style="font-size:15px;font-weight:600;line-height:1.5;margin-bottom:16px">${q.q}</div>${q.opts.map((opt,i)=>{let cls='quiz-option';if(answered){cls+=i===q.ans?' correct':quizState.answers[qIdx]===i?' wrong':' reveal';}return`<button class="${cls}" onclick="answerQuiz(${i})" ${answered?'disabled':''}>${opt}</button>`;}).join('')}${answered?`<div style="margin-top:10px;padding:10px;background:var(--input-bg);border-radius:10px;font-size:13px;color:var(--text2);line-height:1.5">💡 ${q.exp}</div>`:''}</div>${answered?`<button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="nextQuiz()">${qIdx+1<cat.questions.length?'Следующий →':'Завершить'}</button>`:''}<button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← Выйти</button>`;
 }
 function answerQuiz(i){if(quizState.answers[quizState.qIdx]!==undefined)return;quizState.answers[quizState.qIdx]=i;if(i===quizState.cat.questions[quizState.qIdx].ans)quizState.correct++;renderQuizQuestion();}
 function nextQuiz(){quizState.qIdx++;if(quizState.qIdx>=quizState.cat.questions.length)showQuizResult();else renderQuizQuestion();}
@@ -1116,7 +1106,7 @@ function showQuizResult(){
   const color=pct>=80?'#22c55e':pct>=50?'#f59e0b':'#ef4444';
   document.getElementById('quiz-question').style.display='none';
   const res=document.getElementById('quiz-result');res.style.display='block';
-  res.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px;margin-bottom:8px">${pct>=80?'🏆':pct>=50?'📚':'💪'}</div><div style="font-size:36px;font-weight:700;color:${color}">${pct}%</div><div style="font-size:15px;font-weight:600;margin-top:4px">${cat.cat}</div><div style="font-size:13px;color:var(--text4);margin-top:4px">${correct} из ${total} правильных</div></div><button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="startQuiz(${QUIZ_DATA.indexOf(cat)})">Пройти снова</button><button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← К тестам</button>`;
+  res.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:48px;margin-bottom:8px">${pct>=80?'🏆':pct>=50?'📚':'💪'}</div><div style="font-size:36px;font-weight:700;color:${color}">${pct}%</div><div style="font-size:15px;font-weight:600;margin-top:4px">${cat.cat}</div><div style="font-size:13px;color:var(--text3);margin-top:4px">${correct} из ${total} правильных</div></div><button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="startQuiz(${QUIZ_DATA.indexOf(cat)})">Пройти снова</button><button class="btn" style="width:100%;margin-top:8px" onclick="renderQuizHome()">← К тестам</button>`;
 }
 
 // ===================== FLASHCARDS =====================
@@ -1124,7 +1114,7 @@ function renderFCCats(){document.getElementById('fc-cats').innerHTML=FLASHCARDS.
 function selectFCCat(cat){activeFCCat=cat;fcIdx=0;fcFlipped=false;renderFCCats();renderFC();}
 function renderFC(){
   const cat=FLASHCARDS.find(f=>f.cat===activeFCCat),card=cat.cards[fcIdx],total=cat.cards.length;
-  document.getElementById('fc-content').innerHTML=`<div style="text-align:right;font-size:12px;color:var(--text4);margin-bottom:8px">${fcIdx+1} / ${total}</div><div class="flashcard" onclick="flipFC()"><div style="font-size:11px;color:var(--text4);margin-bottom:8px">${fcFlipped?'Ответ':'Вопрос'}</div><div style="font-size:${fcFlipped?'14':'17'}px;font-weight:${fcFlipped?'400':'700'};line-height:1.5;color:${fcFlipped?'#94a3b8':'#f1f5f9'}">${fcFlipped?card.back:card.front}</div><div style="position:absolute;bottom:12px;right:14px;font-size:11px;color:var(--text5)">нажми чтобы перевернуть</div></div><div style="display:flex;gap:10px;margin-top:12px"><button class="btn" style="flex:1" onclick="prevFC()">← Назад</button><button class="btn btn-primary" style="flex:1" onclick="nextFC()">Вперёд →</button></div><div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:${(fcIdx+1)/total*100}%;background:#38bdf8"></div></div>`;
+  document.getElementById('fc-content').innerHTML=`<div style="text-align:right;font-size:12px;color:var(--text4);margin-bottom:8px">${fcIdx+1} / ${total}</div><div class="flashcard" onclick="flipFC()"><div style="font-size:11px;color:var(--text4);margin-bottom:8px">${fcFlipped?'Ответ':'Вопрос'}</div><div style="font-size:${fcFlipped?'14':'17'}px;font-weight:${fcFlipped?'400':'700'};line-height:1.5;color:${fcFlipped?'var(--text3)':'var(--text)'}">${fcFlipped?card.back:card.front}</div><div style="position:absolute;bottom:12px;right:14px;font-size:11px;color:var(--text5)">нажми чтобы перевернуть</div></div><div style="display:flex;gap:10px;margin-top:12px"><button class="btn" style="flex:1" onclick="prevFC()">← Назад</button><button class="btn btn-primary" style="flex:1" onclick="nextFC()">Вперёд →</button></div><div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:${(fcIdx+1)/total*100}%;background:#38bdf8"></div></div>`;
 }
 function flipFC(){fcFlipped=!fcFlipped;renderFC();}
 function nextFC(){const cat=FLASHCARDS.find(f=>f.cat===activeFCCat);fcIdx=(fcIdx+1)%cat.cards.length;fcFlipped=false;renderFC();}
@@ -1158,7 +1148,7 @@ function renderDiary(){
   const filtered=activeDiaryCat==='Все'?diary:diary.filter(d=>d.type===activeDiaryCat);
   const el=document.getElementById('diary-list');
   if(!filtered.length){el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div><div>Нет записей</div></div>`;return;}
-  el.innerHTML=[...filtered].reverse().map(d=>`<div class="list-item"><div style="display:flex;justify-content:space-between"><div><div style="font-weight:600;font-size:14px">${d.type}${d.tooth?' (зуб '+d.tooth+')':''}</div><div style="font-size:12px;color:var(--text4);margin-top:2px">${d.date?new Date(d.date).toLocaleDateString('ru',{day:'numeric',month:'long'}):''}${d.teacher?' · '+d.teacher:''}</div>${d.notes?`<div style="font-size:12px;color:var(--text5);margin-top:2px">${d.notes}</div>`:''}</div><button onclick="deleteDiary('${d.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px;flex-shrink:0">×</button></div></div>`).join('');
+  el.innerHTML=[...filtered].reverse().map(d=>`<div class="list-item"><div style="display:flex;justify-content:space-between"><div><div style="font-weight:600;font-size:14px">${d.type}${d.tooth?' (зуб '+d.tooth+')':''}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${d.date?new Date(d.date).toLocaleDateString('ru',{day:'numeric',month:'long'}):''}${d.teacher?' · '+d.teacher:''}</div>${d.notes?`<div style="font-size:12px;color:var(--text5);margin-top:2px">${d.notes}</div>`:''}</div><button onclick="deleteDiary('${d.id}')" style="background:none;border:none;color:var(--text5);cursor:pointer;font-size:18px;padding:0 4px;flex-shrink:0">×</button></div></div>`).join('');
 }
 function selectDiaryCat(cat){activeDiaryCat=cat;renderDiary();}
 function deleteDiary(id){diary=diary.filter(d=>d.id!==id);localStorage.setItem('da_diary',JSON.stringify(diary));renderDiary();}
@@ -1200,8 +1190,8 @@ function renderSchedule(){
   let html=hours.map(h=>{
     const timeStr=`${String(h).padStart(2,'0')}:00`;
     const entry=dayEntries.find(e=>e.time===timeStr);
-    if(entry)return`<div class="sched-slot busy"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14px">${entry.patient}</div><div style="font-size:12px;color:var(--text4);margin-top:2px">⏰ ${entry.time} · ${entry.duration} мин · ${entry.proc||'—'}</div>${entry.note?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${entry.note}</div>`:''}</div><button onclick="deleteSchedEntry('${entry.id}')" style="background:none;border:none;color:#334155;cursor:pointer;font-size:18px;padding:0 4px">×</button></div></div>`;
-    return`<div class="sched-slot free"><span style="font-size:12px;color:#334155">${timeStr}</span></div>`;
+    if(entry)return`<div class="sched-slot busy"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14px">${entry.patient}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">⏰ ${entry.time} · ${entry.duration} мин · ${entry.proc||'—'}</div>${entry.note?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${entry.note}</div>`:''}</div><button onclick="deleteSchedEntry('${entry.id}')" style="background:none;border:none;color:var(--text5);cursor:pointer;font-size:18px;padding:0 4px">×</button></div></div>`;
+    return`<div class="sched-slot free"><span style="font-size:12px;color:var(--text3)">${timeStr}</span></div>`;
   }).join('');
   document.getElementById('schedule-slots').innerHTML=html;
 }
@@ -1214,49 +1204,226 @@ function saveSchedEntry(){
 }
 function deleteSchedEntry(id){schedule=schedule.filter(s=>s.id!==id);localStorage.setItem('da_schedule',JSON.stringify(schedule));renderSchedule();}
 
-// ===================== AI DIAGNOSTICS =====================
-function initAI(){
-  if(!aiHistory.length){
-    aiHistory=[{role:'assistant',content:'Здравствуйте! Я AI-ассистент для дифференциальной диагностики в стоматологии. Опишите симптомы пациента, и я помогу с диагнозом, тактикой лечения и подбором препаратов.\n\n⚠️ Инструмент не заменяет клиническое суждение врача.'}];
-    renderAIChat();
-  }
+// ===================== TOP 30 DATA =====================
+const TOP30_CATS=['Все','Кариес/Пульпит','Периодонтит','Пародонт','Хирургия','Слизистая','Другие'];
+let activeTop30Cat='Все';
+
+const TOP30=[
+  {id:1,num:'01',cat:'Кариес/Пульпит',symptom:'Кратковременная боль от холодного и сладкого',diagnosis:'Кариес дентина',code:'K02.1',color:'#f59e0b',
+   details:'Боль от холодного, кислого, сладкого, проходит в течение 15–30 секунд. Кариозная полость визуально определяется. Зондирование болезненно в области дна. Перкуссия безболезненна. ЭОД 2–6 мкА (норма).',
+   tactics:['Анестезия инфильтрационная (артикаин 1.7 мл)','Препарирование, удаление размягчённого дентина','Медобработка: хлоргексидин 0.05%','Адгезив, полимеризация 20 сек','Послойная реставрация композитом','Шлифовка, полировка, контроль окклюзии'],
+   drugs:[{n:'Артикаин 4%',d:'1.7 мл карпула',note:'Инфильтрационная анестезия'},{n:'Хлоргексидин 0.05%',d:'Ирригация полости',note:'Медобработка'},{n:'Ибупрофен 400 мг',d:'1 табл. после приёма',note:'При болезненности'}]},
+
+  {id:2,num:'02',cat:'Кариес/Пульпит',symptom:'Острая самопроизвольная боль, усиливается ночью и от тепла',diagnosis:'Острый пульпит',code:'K04.02',color:'#f97316',
+   details:'Интенсивная самопроизвольная боль, нарастает ночью. От тепла усиливается и долго не стихает, от холода — кратковременное облегчение. Пульпарная камера не вскрыта. ЭОД 20–40 мкА. Перкуссия слабо болезненна.',
+   tactics:['Анестезия (артикаин + мандибулярная при нижних зубах)','Вскрытие пульпарной камеры, экстирпация пульпы','Определение рабочей длины (апекслокатор + рентген)','Механическая обработка NiTi-файлами','Ирригация: NaOCl 3% → ЭДТА 17% → хлоргексидин 0.2%','Пломбирование гуттаперчей в 1 посещение','Реставрация коронки'],
+   drugs:[{n:'Артикаин 4%',d:'1.7–3.4 мл',note:'Анестезия'},{n:'NaOCl 3%',d:'Ирригация каналов',note:'Основной ирригант'},{n:'ЭДТА 17%',d:'Хелатирование',note:'Удаление смазанного слоя'},{n:'Кеторолак 10 мг',d:'× 3 р/сут до 3 дней',note:'После визита'}]},
+
+  {id:3,num:'03',cat:'Кариес/Пульпит',symptom:'Периодические боли от раздражителей, зуб потемнел',diagnosis:'Хронический пульпит',code:'K04.04',color:'#fb923c',
+   details:'Боль от температурных раздражителей долго не проходит. Зуб может быть потемневшим. Зондирование вызывает кровотечение. ЭОД 40–60 мкА. Хроническое течение с периодами обострений.',
+   tactics:['Анестезия (может потребоваться увеличенная доза)','Вскрытие пульпарной камеры, экстирпация','Эндодонтическое лечение в 1–2 посещения','Ca(OH)₂ между посещениями при необходимости','Пломбирование каналов гуттаперчей','Реставрация'],
+   drugs:[{n:'Артикаин 4%',d:'До 3.4 мл',note:'Может потребоваться двойная доза'},{n:'Хлоргексидин 0.2%',d:'Ирригация каналов',note:'Эндодонтическое применение'},{n:'Кальция гидроксид',d:'Временная повязка 2–4 нед.',note:'Между посещениями'},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'3–5 дней'}]},
+
+  {id:4,num:'04',cat:'Кариес/Пульпит',symptom:'Жалоб нет, зуб потемнел, зондирование безболезненно',diagnosis:'Некроз пульпы',code:'K04.1',color:'#92400e',
+   details:'Пульпа нежизнеспособна. ЭОД > 100 мкА. Зондирование и перкуссия безболезненны. Зуб изменён в цвете (серый, жёлтый). Специфический запах при вскрытии камеры. На рентгене — без изменений или расширение щели.',
+   tactics:['Анестезия часто не требуется','Вскрытие и раскрытие пульпарной камеры','Механическая и медикаментозная обработка каналов','Ca(OH)₂ на 1–4 недели, временная пломба','Пломбирование гуттаперчей','Рентгенконтроль'],
+   drugs:[{n:'NaOCl 3–5%',d:'Ирригация каналов',note:'Основной ирригант'},{n:'ЭДТА 17%',d:'Финальная ирригация',note:'Смазанный слой'},{n:'Кальция гидроксид',d:'1–4 недели',note:'Временная повязка'}]},
+
+  {id:5,num:'05',cat:'Кариес/Пульпит',symptom:'Кариес у ребёнка до 6 лет, множественные поражения',diagnosis:'Ранний детский кариес',code:'K02.0',color:'#d97706',
+   details:'Множественное поражение молочных зубов. Белые и коричневые пятна на вестибулярных поверхностях верхних резцов. Бутылочный кариес. Связан с ночным кормлением, плохой гигиеной.',
+   tactics:['Реминерализирующая терапия (фтор, ГАП)','Серебрение / озонирование при начальном кариесе','Реставрация СИЦ при кариесе дентина','Обучение родителей: диета, гигиена','Контроль каждые 3 месяца'],
+   drugs:[{n:'Фторлак',d:'Аппликация × 4 р/год',note:'Профилактика'},{n:'Нитрат серебра 30%',d:'Аппликация',note:'Начальный кариес'},{n:'СИЦ Fuji IX',d:'Реставрация',note:'Материал выбора у детей'}]},
+
+  {id:6,num:'06',cat:'Периодонтит',symptom:'Боль при накусывании, ощущение «выросшего» зуба',diagnosis:'Острый апикальный периодонтит',code:'K04.4',color:'#ef4444',
+   details:'Зуб девитален или ранее лечён. Чёткая болезненность при вертикальной перкуссии. Ощущение «выросшего» зуба. Мягкие ткани не изменены или незначительно отёчны. Рентген: расширение периодонтальной щели у верхушки.',
+   tactics:['Раскрытие корневого канала, эвакуация экссудата','Оставить открытым на 1–2 суток (серозная форма)','Ирригация NaOCl, ЭДТА','Антибиотики при отёке и признаках инфекции','Временная повязка. Через 3–5 дней — пломбирование'],
+   drugs:[{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'5–7 дней'},{n:'Метронидазол 500 мг',d:'× 3 р/сут',note:'Комбинация с амоксициллином'},{n:'Кеторолак 10 мг',d:'× 3 р/сут до 5 дней',note:'Анальгезия'},{n:'NaOCl 3%',d:'Ирригация',note:'Эндодонтия'}]},
+
+  {id:7,num:'07',cat:'Периодонтит',symptom:'Свищ на десне, зуб ранее лечён, жалобы минимальны',diagnosis:'Хронический апикальный периодонтит',code:'K04.5',color:'#dc2626',
+   details:'Свищевой ход на десне или переходной складке. Зуб чаще девитален, ранее лечён. Перкуссия слабо болезненна. Рентген: очаг деструкции кости у верхушки (гранулёма или радикулярная киста).',
+   tactics:['Повторное эндодонтическое лечение: распломбировка','Механическая и медикаментозная обработка каналов','Ca(OH)₂ на 4–8 недель','Рентгенконтроль через 3–6 месяцев','При отсутствии регрессии — резекция верхушки корня'],
+   drugs:[{n:'Кальция гидроксид',d:'4–8 недель',note:'Временная пломба'},{n:'Хлоргексидин 0.2%',d:'Ирригация',note:'Эндодонтия'},{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'При обострении'}]},
+
+  {id:8,num:'08',cat:'Периодонтит',symptom:'Отёк лица, флюктуация, температура тела повышена',diagnosis:'Периостит / Поднадкостничный абсцесс',code:'K04.7',color:'#b91c1c',
+   details:'Выраженный отёк мягких тканей с флюктуацией. Температура 37.5–39°C. Боль при перкуссии причинного зуба. Открывание рта может быть ограничено. Регионарные лимфоузлы увеличены.',
+   tactics:['Вскрытие абсцесса: горизонтальный разрез по складке','Расширение зажимом, дренаж 24–48 ч','Промывание хлоргексидином','Раскрытие канала причинного зуба','Антибиотики обязательно 7 дней','Контроль через 48 ч'],
+   drugs:[{n:'Амоксициллин/клавуланат 875 мг',d:'× 2 р/сут',note:'7 дней'},{n:'Метронидазол 500 мг',d:'× 3 р/сут',note:'7 дней'},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'Жаропонижающее и анальгетик'},{n:'Хлоргексидин 0.05%',d:'Полоскание × 3 р/сут',note:'14 дней'}]},
+
+  {id:9,num:'09',cat:'Периодонтит',symptom:'Диффузный отёк с нескольких зубов, распространяется на шею',diagnosis:'Одонтогенная флегмона',code:'K14.3',color:'#7f1d1d',
+   details:'⚠️ ЖИЗНЕУГРОЖАЮЩЕЕ СОСТОЯНИЕ. Диффузный воспалительный инфильтрат без чётких границ. Распространение на жевательное пространство, шею. Тризм, дисфагия, одышка — немедленная госпитализация.',
+   tactics:['⚠️ СРОЧНАЯ госпитализация в ЧЛХ-отделение','Хирургическое вскрытие под общей анестезией','Внутривенная антибиотикотерапия','Интенсивная инфузионная терапия','Удаление причинного зуба'],
+   drugs:[{n:'Амоксициллин/клавуланат',d:'В/в 1.2 г × 3 р/сут',note:'Стационар'},{n:'Метронидазол',d:'В/в 500 мг × 3 р/сут',note:'Стационар'},{n:'Клиндамицин',d:'В/в 600 мг × 3 р/сут',note:'Альтернатива'}]},
+
+  {id:10,num:'10',cat:'Пародонт',symptom:'Кровоточивость дёсен при чистке, отёк, покраснение',diagnosis:'Хронический катаральный гингивит',code:'K05.1',color:'#22c55e',
+   details:'Кровоточивость при зондировании и чистке. Десна отёчна, гиперемирована. Глубина зондирования 1–3 мм, костная ткань не поражена. Обильные зубные отложения. Обратимая стадия — полностью излечима.',
+   tactics:['Индексная оценка (ИГР-У, PMA)','Мотивация, инструктаж по чистке','Удаление наддесневого камня (ультразвук)','Полировка поверхностей зубов','Аппликации хлоргексидина','Контроль через 2–4 недели'],
+   drugs:[{n:'Хлоргексидин 0.05%',d:'Полоскание 1 мин × 2 р/сут',note:'10–14 дней'},{n:'Метрогил Дента гель',d:'Аппликация × 2 р/сут',note:'7–10 дней'}]},
+
+  {id:11,num:'11',cat:'Пародонт',symptom:'Подвижность зубов, карманы > 4 мм, гноетечение',diagnosis:'Хронический пародонтит средней тяжести',code:'K05.3',color:'#16a34a',
+   details:'Карманы 4–6 мм. Горизонтальная резорбция кости на 1/3–1/2 длины корня. Подвижность I–II степени по Миллеру. Кровоточивость при зондировании. Патологические карманы с гнойным отделяемым.',
+   tactics:['Профессиональная гигиена полости рта','Закрытый кюретаж (кюреты Грейси)','Антибиотики при активном воспалении','Антисептические полоскания курсами','Шинирование при II–III ст. подвижности','Хирургия при карманах > 6 мм'],
+   drugs:[{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'7 дней'},{n:'Метронидазол 500 мг',d:'× 3 р/сут',note:'Обязательно комбинировать'},{n:'Хлоргексидин 0.2%',d:'Ирригация карманов',note:'После кюретажа'},{n:'Хлоргексидин 0.05%',d:'Полоскание × 2 р/сут',note:'14 дней'}]},
+
+  {id:12,num:'12',cat:'Пародонт',symptom:'Острая боль в десне, некроз сосочков, серый налёт, запах',diagnosis:'Язвенно-некротический гингивит Венсана',code:'K05.0',color:'#ca8a04',
+   details:'Острое начало. Болезненные язвы на вершинах межзубных сосочков с серым налётом (псевдомембрана). Резкий запах изо рта. Часто у молодых людей при стрессе, снижении иммунитета, ВИЧ.',
+   tactics:['Антисептическая обработка: перекись водорода 3% → хлоргексидин','Удаление некротических масс ватными тампонами','Антибиотики (метронидазол обязателен!)','Обезболивающие','Витамины C и группы B','Контроль через 3 дня'],
+   drugs:[{n:'Метронидазол 500 мг',d:'× 3 р/сут',note:'7 дней — обязательно'},{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'Комбинация'},{n:'Перекись водорода 3%',d:'Ирригация 1:1 с водой',note:'Удаление некроза'},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'Обезболивание'}]},
+
+  {id:13,num:'13',cat:'Пародонт',symptom:'Оголение шеек зубов, чувствительность, десна не кровоточит',diagnosis:'Пародонтоз',code:'K05.4',color:'#0891b2',
+   details:'Равномерная убыль десны без воспаления. Оголение шеек и корней зубов. Гиперестезия. Зубных отложений минимум. Рентген: склеротические изменения альвеолы, равномерная резорбция кости.',
+   tactics:['Профессиональная гигиена','Устранение гиперестезии (фторирование, десенситайзеры)','Вестибулопластика при выраженной рецессии','Консультация терапевта (сосудистая патология)'],
+   drugs:[{n:'Фторлак',d:'Аппликация курс 3–5 раз',note:'Реминерализация'},{n:'Sensodyne (зубная паста)',d:'Ежедневная чистка',note:'Снижение чувствительности'},{n:'Хлоргексидин 0.05%',d:'По необходимости',note:''}]},
+
+  {id:14,num:'14',cat:'Пародонт',symptom:'Разрастание дёсен на фоне приёма лекарств',diagnosis:'Лекарственная гиперплазия десны',code:'K06.1',color:'#0369a1',
+   details:'Диффузное безболезненное увеличение дёсен. Препараты-триггеры: нифедипин (блокаторы Ca²⁺), фенитоин (противосудорожные), циклоспорин (иммунодепрессанты). Псевдопародонтальные карманы.',
+   tactics:['Консультация с лечащим врачом о замене препарата','Тщательная профессиональная гигиена','Гингивэктомия при выраженной гиперплазии','После замены препарата возможен регресс'],
+   drugs:[{n:'Хлоргексидин 0.05%',d:'Полоскание × 2 р/сут',note:'Гигиена'},{n:'Метрогил Дента',d:'Аппликации',note:'Противовоспалительное'}]},
+
+  {id:15,num:'15',cat:'Хирургия',symptom:'Плановое удаление зуба без острого воспаления',diagnosis:'Удаление зуба (плановое)',code:'K08.1',color:'#7c3aed',
+   details:'Показания: хронический периодонтит без перспективы лечения, разрушение > 80%, пародонтит III ст., ретенция по показаниям. Проверить аллергии, антикоагулянты, наличие ОПТГ.',
+   tactics:['Осмотр, ОПТГ, проверить аллергии и антикоагулянты','Анестезия инфильтрационная + проводниковая','Отслойка круговой связки элеватором','Наложение щипцов, люксация, тракция','Кюретаж лунки, сближение краёв','Тампон 20–30 мин. Рекомендации: холод, не полоскать 24 ч'],
+   drugs:[{n:'Артикаин 4%',d:'1.7–3.4 мл',note:'Анестезия'},{n:'Ибупрофен 400 мг',d:'До и после удаления',note:'Упреждающая анальгезия'},{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'По показаниям 5–7 дней'}]},
+
+  {id:16,num:'16',cat:'Хирургия',symptom:'Острая боль в лунке на 3–5 день после удаления',diagnosis:'Альвеолит (сухая лунка)',code:'K10.3',color:'#c026d3',
+   details:'Боль резко усиливается на 3–5 день после удаления. Лунка пуста или заполнена серым распадающимся сгустком. Резкий гнилостный запах. Перифокальная ткань болезненна при пальпации.',
+   tactics:['Промывание лунки тёплым физ. раствором и хлоргексидином','Аппликационная анестезия, антисептическая повязка','Смена повязки каждые 2–3 дня','Анальгетики системно','Антибиотики при распространении инфекции'],
+   drugs:[{n:'Альвожил / Альвостаз',d:'Заполнить лунку',note:'Основная повязка'},{n:'Хлоргексидин 0.05%',d:'Ирригация лунки',note:'При каждой перевязке'},{n:'Кеторолак 10 мг',d:'× 3 р/сут до 5 дней',note:'Обезболивание'},{n:'Линкомицин 500 мг',d:'× 3 р/сут',note:'5 дней при инфекции'}]},
+
+  {id:17,num:'17',cat:'Хирургия',symptom:'Боль у зуба мудрости, отёк, ограничение открывания рта',diagnosis:'Перикоронит',code:'K05.22',color:'#9333ea',
+   details:'Воспаление тканей вокруг прорезывающегося зуба мудрости. Нависающий капюшон слизистой с гнойным отделяемым. Боль иррадиирует в ухо, горло. Тризм. Регионарный лимфаденит.',
+   tactics:['Промывание под капюшоном (хлоргексидин, перекись)','Иссечение капюшона или удаление зуба мудрости','ОПТГ для оценки положения зуба','Антибиотики при тризме и t° > 37.5°','Обезболивающие'],
+   drugs:[{n:'Амоксициллин/клавуланат 875 мг',d:'× 2 р/сут',note:'7 дней'},{n:'Метронидазол 500 мг',d:'× 3 р/сут',note:'Комбинация'},{n:'Хлоргексидин 0.05%',d:'Ирригация под капюшон × 3 р/сут',note:''},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'Обезболивание'}]},
+
+  {id:18,num:'18',cat:'Хирургия',symptom:'Онемение губы или языка после анестезии не прошло',diagnosis:'Парестезия (травма нерва)',code:'S04.3',color:'#6366f1',
+   details:'Онемение, покалывание или жжение в зоне иннервации нижнеальвеолярного нерва после удаления зуба или анестезии. Если симптомы сохраняются > 8 часов — повреждение нерва.',
+   tactics:['Наблюдение первые 24–48 часов','При нарастании — консультация невролога и ЧЛХ','Витамины группы B (B1, B6, B12)','Физиолечение: лазер, ультрафонофорез','НПВС для снятия отёка нерва'],
+   drugs:[{n:'Мильгамма (B1+B6+B12)',d:'1 амп. в/м × 1 р/сут',note:'10 дней'},{n:'Нимесулид 100 мг',d:'× 2 р/сут',note:'5–7 дней'},{n:'Пентоксифиллин 400 мг',d:'× 3 р/сут',note:'Улучшение кровотока'}]},
+
+  {id:19,num:'19',cat:'Слизистая',symptom:'Болезненные язвочки на слизистой, рецидивируют',diagnosis:'Рецидивирующий афтозный стоматит',code:'K12.0',color:'#0ea5e9',
+   details:'Болезненные язвы (афты) на слизистой щёк, губ, дна полости рта. Округлые, покрыты жёлто-серым налётом, окружены красным ободком. Рецидив каждые 2–8 недель. Размер 2–10 мм.',
+   tactics:['Аппликации обезболивающих и противовоспалительных гелей','Исключить триггеры: стресс, травма, дефицит B12/железа','При частых рецидивах — обследование ЖКТ и иммунный статус','Облитерация лазером при тяжёлом течении'],
+   drugs:[{n:'Солкосерил гель',d:'Аппликация × 3–4 р/сут',note:'Заживление афт'},{n:'Холисал гель',d:'Аппликация × 2–3 р/сут',note:'Обезболивание'},{n:'Мирамистин 0.01%',d:'Орошение × 3 р/сут',note:'Антисептика'},{n:'Ибупрофен 400 мг',d:'При выраженной боли',note:'Внутрь'}]},
+
+  {id:20,num:'20',cat:'Слизистая',symptom:'Белый творожистый налёт на слизистой, жжение',diagnosis:'Кандидоз полости рта',code:'B37.0',color:'#64748b',
+   details:'Белый налёт на слизистой щёк, языке, нёбе — снимается шпателем, остаётся красная болезненная поверхность. Жжение, сухость. Провокаторы: антибиотики, ингаляционные ГКС, иммунодефицит.',
+   tactics:['Соскоб на грибки для подтверждения диагноза','Антимикотики местно и системно','Устранить провоцирующие факторы','Обработка зубных протезов при их наличии'],
+   drugs:[{n:'Флуконазол 150 мг',d:'1 р/сут',note:'7–14 дней'},{n:'Нистатин 500 000 ЕД',d:'× 4 р/сут рассасывать',note:'Местно 10 дней'},{n:'Хлоргексидин 0.05%',d:'Полоскание × 2 р/сут',note:''}]},
+
+  {id:21,num:'21',cat:'Слизистая',symptom:'Пузыри и эрозии во рту, высокая температура',diagnosis:'Острый герпетический стоматит',code:'K12.1',color:'#ec4899',
+   details:'Острое начало, t° 38–39°C. Множественные пузырьки, быстро превращающиеся в болезненные эрозии на слизистой рта, губах. Регионарный лимфаденит. Чаще у детей и молодых людей.',
+   tactics:['Противовирусные препараты в первые 48–72 часа','Симптоматическое лечение (обезболивание, полоскания)','Обильное питьё, мягкая пища','Витамины, иммуномодуляторы','Контроль через 3–5 дней'],
+   drugs:[{n:'Ацикловир 200 мг',d:'× 5 р/сут',note:'5 дней'},{n:'Ацикловир крем 5%',d:'Местно × 5 р/сут',note:'На губы и кожу'},{n:'Холисал гель',d:'Аппликации',note:'Обезболивание слизистой'},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'Температура и боль'}]},
+
+  {id:22,num:'22',cat:'Слизистая',symptom:'Жжение под протезом, красная слизистая, белый налёт',diagnosis:'Протезный стоматит / Кандидоз протезного ложа',code:'K12.1',color:'#f43f5e',
+   details:'Покраснение и отёк слизистой под пластиночным протезом. Белый налёт на слизистой под протезом. Жжение, дискомфорт. Связан с ношением протеза круглосуточно и плохим уходом.',
+   tactics:['Ежедневная обработка протеза антисептиком','Снимать протез на ночь (обязательно!)','Противогрибковые гели под протез','Коррекция или перебазировка при плохой фиксации'],
+   drugs:[{n:'Нистатин суспензия',d:'Аппликация под протез × 3 р/сут',note:'14 дней'},{n:'Мирамистин 0.01%',d:'Обработка протеза и полости рта',note:'Ежедневно'},{n:'Флуконазол 150 мг',d:'1 р/сут',note:'7–14 дней при тяжёлом течении'}]},
+
+  {id:23,num:'23',cat:'Другие',symptom:'Щелчки и боль в суставе при открывании рта',diagnosis:'Дисфункция ВНЧС',code:'K07.6',color:'#84cc16',
+   details:'Щелчки или крепитация при движении нижней челюсти. Боль в суставе и жевательных мышцах. Ограничение или отклонение при открывании. Часто у пациентов с бруксизмом и стрессом.',
+   tactics:['КЛКТ или МРТ ВНЧС для диагностики','Разгрузочная шина (носить ночью)','НПВС для снятия воспаления','Физиолечение, миогимнастика','Консультация ортодонта и физиотерапевта'],
+   drugs:[{n:'Нимесулид 100 мг',d:'× 2 р/сут',note:'10–14 дней'},{n:'Мидокалм 150 мг',d:'× 2–3 р/сут',note:'Миорелаксант 2–3 нед.'},{n:'Диклофенак гель',d:'Местно на сустав × 2 р/сут',note:''}]},
+
+  {id:24,num:'24',cat:'Другие',symptom:'Боль и отёк слюнной железы при приёме пищи',diagnosis:'Сиаладенит / Слюннокаменная болезнь',code:'K11.2',color:'#a3e635',
+   details:'Болезненный отёк поднижнечелюстной или околоушной железы во время еды. Уменьшается через 20–30 мин. Камень может пальпироваться в протоке. Подтверждение: УЗИ + рентген.',
+   tactics:['УЗИ слюнных желёз, рентген протока','Слюногонная диета, массаж железы','Антибиотики при гнойном воспалении','Литотрипсия или хирургическое удаление камня'],
+   drugs:[{n:'Пилокарпин 5 мг',d:'× 3 р/сут',note:'Стимуляция слюноотделения'},{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'При гнойном сиаладените'},{n:'Нимесулид 100 мг',d:'× 2 р/сут',note:'Снятие воспаления'}]},
+
+  {id:25,num:'25',cat:'Другие',symptom:'Жгучая стреляющая боль по ходу нерва без видимой причины',diagnosis:'Невралгия тройничного нерва',code:'G50.0',color:'#fbbf24',
+   details:'Приступообразная стреляющая боль в зоне I, II или III ветви тройничного нерва. Триггерные зоны. Продолжительность секунды — минуты. Боль не связана с зубами (перкуссия безболезненна, ЭОД норма).',
+   tactics:['Направление к неврологу','МРТ головного мозга (исключить компрессию нерва)','Антиконвульсанты — основное лечение','Блокады тройничного нерва (у специалиста)'],
+   drugs:[{n:'Карбамазепин 200 мг',d:'Начало 2 р/сут, титрование',note:'Основной — назначает невролог'},{n:'Габапентин 300 мг',d:'Начало 1 р/сут',note:'Альтернатива'},{n:'Амитриптилин 25 мг',d:'На ночь',note:'Нейропатическая боль'}]},
+
+  {id:26,num:'26',cat:'Другие',symptom:'Сломан зуб после травмы, отломок коронки',diagnosis:'Перелом коронки / Вывих зуба',code:'S02.5',color:'#38bdf8',
+   details:'Перелом эмали, дентина или пульпарной камеры. Частичный или полный вывих зуба. Рентгенконтроль обязателен. При полном вывихе — реплантация в первые 20–30 мин (хранить в молоке или физ. растворе).',
+   tactics:['Рентгенограмма: тип перелома и периапикальная область','При переломе эмали/дентина без вскрытия пульпы — реставрация','При вскрытии пульпы — Ca(OH)₂ или эндодонтия','При вывихе — репозиция, шинирование 4–6 нед.','При авульсии — срочная реплантация, хранить в молоке'],
+   drugs:[{n:'Артикаин 4%',d:'Анестезия',note:''},{n:'Хлоргексидин 0.05%',d:'Ирригация лунки перед реплантацией',note:''},{n:'Ибупрофен 400 мг',d:'× 3 р/сут',note:'Боль и отёк'},{n:'Доксициклин 100 мг',d:'× 2 р/сут',note:'7 дней при реплантации'}]},
+
+  {id:27,num:'27',cat:'Другие',symptom:'Скрежет зубами ночью, стирание, боль в мышцах утром',diagnosis:'Бруксизм / Патологическое стирание',code:'K08.0',color:'#d97706',
+   details:'Ночной скрежет зубами. Патологическое стирание жевательных и передних зубов. Боль в жевательных мышцах по утрам. Часто сочетается с дисфункцией ВНЧС. Психоэмоциональный стресс.',
+   tactics:['Изготовление ночной разгрузочной шины (каппы)','Консультация психолога или невролога','Реставрация стёртых зубов после стабилизации','Ботулинотерапия жевательных мышц при тяжёлом бруксизме'],
+   drugs:[{n:'Мидокалм 150 мг',d:'× 2–3 р/сут',note:'Миорелаксант 2–3 нед.'},{n:'Магне B6',d:'× 2 р/сут',note:'Снижение нервной возбудимости'},{n:'Нимесулид 100 мг',d:'× 2 р/сут до 5 дней',note:'Боль в мышцах'}]},
+
+  {id:28,num:'28',cat:'Другие',symptom:'Неприятный запах изо рта, пациент озабочен',diagnosis:'Галитоз',code:'K08.8',color:'#6b7280',
+   details:'Неприятный запах изо рта. Причины: заболевания пародонта (80%), кариозные полости, кандидоз, патология ЖКТ и ЛОР-органов. Оральный галитоз — при осмотре виден налёт на языке, пародонтальные карманы.',
+   tactics:['Осмотр: пародонт, кариес, слизистая, язык','Профессиональная гигиена, устранение очагов инфекции','Инструктаж по чистке языка (скребок)','Антисептические полоскания','При подозрении на ЖКТ или ЛОР — направить специалисту'],
+   drugs:[{n:'Хлоргексидин 0.05%',d:'Полоскание × 2 р/сут',note:'10–14 дней'},{n:'Цетилпиридиния хлорид',d:'Ополаскиватель после чистки',note:'Ежедневно'},{n:'Метрогил Дента',d:'Аппликации при пародонтите',note:'7 дней'}]},
+
+  {id:29,num:'29',cat:'Другие',symptom:'Пациент недоволен цветом зубов, просит отбеливание',diagnosis:'Дисколорит зубов / Эстетическая реставрация',code:'Z46.7',color:'#a78bfa',
+   details:'Изменение цвета зубов: налёт, флюороз, тетрациклиновый дисколорит, пигментация от чая, кофе, курения. Перед отбеливанием: профессиональная гигиена, лечение кариеса и воспалений.',
+   tactics:['Фотографирование до/после, определение цвета по шкале Vita','Профессиональная гигиена перед реставрацией','Отбеливание: офисное (38% H₂O₂) или домашнее (16–22%)','Виниры или коронки — по показаниям','Прямая реставрация композитом при сколах'],
+   drugs:[{n:'Carbamide Peroxide 16–22%',d:'В каппе 2–4 ч',note:'Домашнее отбеливание'},{n:'Фторлак',d:'После отбеливания',note:'Снижение чувствительности'},{n:'Sensodyne',d:'Ежедневная чистка',note:'При гиперестезии'}]},
+
+  {id:30,num:'30',cat:'Хирургия',symptom:'Выраженная болезненность при зондировании зуба под коронкой',diagnosis:'Перфорация корня / Осложнения эндодонтии',code:'K04.6',color:'#f97316',
+   details:'Болезненность при зондировании. Зуб под искусственной коронкой. Возможная перфорация в процессе эндодонтического лечения или препарирования. Рентгенологически: выход материала или просветление за корнем.',
+   tactics:['КЛКТ для точной диагностики перфорации','МТА (минеральный триоксидный агрегат) для закрытия перфорации','При невозможности консервативного лечения — резекция верхушки','Реставрация или изготовление новой коронки','При прогнозе "безнадёжный" — удаление'],
+   drugs:[{n:'МТА Proroot',d:'Закрытие перфорации',note:'Биосовместимый материал'},{n:'Хлоргексидин 0.2%',d:'Ирригация каналов',note:''},{n:'Амоксициллин 500 мг',d:'× 3 р/сут',note:'При признаках инфекции'}]},
+];
+
+// ===================== TOP 30 FUNCTIONS =====================
+function renderTop30Cats(){
+  document.getElementById('top30-cats').innerHTML=TOP30_CATS.map(c=>
+    `<button class="cat-btn ${activeTop30Cat===c?'active':''}" onclick="selectTop30Cat('${c}')">${c}</button>`
+  ).join('');
 }
-function renderAIChat(){
-  document.getElementById('ai-chat').innerHTML=aiHistory.map(m=>`<div class="ai-bubble ${m.role==='user'?'user':'bot'}" style="white-space:pre-wrap">${m.content}</div>`).join('');
-  setTimeout(()=>{const chat=document.getElementById('ai-chat');if(chat)chat.scrollTop=chat.scrollHeight;},50);
+function selectTop30Cat(cat){activeTop30Cat=cat;renderTop30Cats();renderTop30();}
+function renderTop30(){
+  const q=(document.getElementById('top30-search')||{}).value||'';
+  const tabs=document.getElementById('top30-cats');
+  if(tabs)tabs.style.display=q?'none':'flex';
+  let list=q
+    ?TOP30.filter(c=>c.symptom.toLowerCase().includes(q.toLowerCase())||c.diagnosis.toLowerCase().includes(q.toLowerCase())||c.code.toLowerCase().includes(q.toLowerCase()))
+    :activeTop30Cat==='Все'?TOP30:TOP30.filter(c=>c.cat===activeTop30Cat);
+  const el=document.getElementById('top30-list');
+  if(!list.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div>Ничего не найдено</div></div>`;return;}
+  el.innerHTML=list.map(c=>`
+    <div class="list-item" onclick="showTop30Detail(${c.id})">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:38px;height:38px;border-radius:11px;background:${c.color}22;border:1px solid ${c.color}55;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:${c.color};flex-shrink:0">${c.num}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px;margin-bottom:3px;color:var(--text)">${c.symptom}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:700">${c.code}</span>
+            <span style="font-size:12px;color:var(--text3)">${c.diagnosis}</span>
+          </div>
+        </div>
+        <div style="color:var(--text5);font-size:20px;flex-shrink:0">›</div>
+      </div>
+    </div>`).join('');
 }
-function setAITemplate(text){document.getElementById('ai-input').value=text;}
-async function sendAI(){
-  const input=document.getElementById('ai-input');
-  const msg=input.value.trim();if(!msg)return;
-  input.value='';
-  aiHistory.push({role:'user',content:msg});
-  aiHistory.push({role:'assistant',content:'⏳ Анализирую симптомы...'});
-  renderAIChat();
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:`Ты — AI-ассистент врача-стоматолога. Помогаешь с дифференциальной диагностикой, тактикой лечения и подбором препаратов. Отвечай структурированно на русском языке. Формат ответа:
-1. 🔍 Вероятные диагнозы (с кодами МКБ-10)
-2. 💡 Дополнительные вопросы для уточнения диагноза
-3. 📋 Рекомендуемая тактика лечения
-4. 💊 Препараты (с дозировками)
-5. ⚠️ Важные предупреждения (если есть)
-Будь конкретным и практичным. Не более 400 слов.`,
-        messages:aiHistory.filter(m=>m.content!=='⏳ Анализирую симптомы...').map(m=>({role:m.role,content:m.content}))
-      })
-    });
-    const data=await resp.json();
-    const reply=data.content?data.content.map(c=>c.text||'').join(''):'Не удалось получить ответ. Проверьте соединение.';
-    aiHistory[aiHistory.length-1]={role:'assistant',content:reply};
-  }catch(e){
-    aiHistory[aiHistory.length-1]={role:'assistant',content:'⚠️ Ошибка соединения. Проверьте интернет и попробуйте снова.'};
-  }
-  renderAIChat();
+function showTop30Detail(id){
+  const c=TOP30.find(x=>x.id===id);
+  document.getElementById('top30-detail-title').textContent=`#${c.num} ${c.diagnosis}`;
+  document.getElementById('top30-detail-content').innerHTML=`
+    <div class="card" style="border-left:3px solid ${c.color}">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">
+        <span style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}55;padding:4px 10px;border-radius:8px;font-size:13px;font-weight:700;flex-shrink:0">${c.code}</span>
+        <div style="font-size:11px;color:var(--text4);padding-top:4px">${c.cat}</div>
+      </div>
+      <div class="label">🔍 Симптомы и клиника</div>
+      <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px">${c.symptom}</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.65">${c.details}</div>
+    </div>
+    <div class="card">
+      <div class="label">📋 Тактика лечения</div>
+      ${c.tactics.map((t,i)=>`
+        <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:7px;background:${c.color}22;color:${c.color};border:1px solid ${c.color}44;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${i+1}</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.55;flex:1;padding-top:2px">${t}</div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="label">💊 Препараты</div>
+      ${c.drugs.map(d=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border2)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:3px">
+            <div style="font-weight:600;font-size:14px;color:var(--text)">${d.n}</div>
+            <div style="background:var(--accent)22;color:var(--accent);border:1px solid var(--accent)44;padding:3px 9px;border-radius:7px;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0">${d.d}</div>
+          </div>
+          ${d.note?`<div style="font-size:12px;color:var(--text3)">📝 ${d.note}</div>`:''}`).join('')}
+      </div>
+    </div>`;
+  showPage('top30-detail');
 }
 
 // ===================== DIFF DIAGNOSIS =====================
@@ -1276,7 +1443,7 @@ function renderDiagResults(){
   if(!scored.length){document.getElementById('diag-results').innerHTML=`<div class="empty"><div>Нет совпадающих диагнозов</div><div style="font-size:12px;margin-top:4px">Добавьте больше симптомов</div></div>`;return;}
   document.getElementById('diag-results').innerHTML=scored.map((d,i)=>{
     const pct=Math.round(d.matched/d.symptoms.length*100);
-    return`<div class="diag-result"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><span style="background:${d.color}22;color:${d.color};border:1px solid ${d.color}44;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:700">${d.code}</span><span style="font-size:15px;font-weight:700;margin-left:8px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${d.name}</span></div><span style="font-size:13px;color:${d.color};font-weight:700">${pct}%</span></div><div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div><div style="font-size:13px;color:var(--text3);margin-bottom:6px">📋 ${d.tactics}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${d.drugs.map(dr=>`<span class="tag" style="background:#0ea5e922;color:var(--accent2);border:1px solid #0ea5e944;font-size:11px">💊 ${dr}</span>`).join('')}</div></div>`;
+    return`<div class="diag-result"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><span style="background:${d.color}22;color:${d.color};border:1px solid ${d.color}44;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:700">${d.code}</span><span style="font-size:15px;font-weight:700;margin-left:8px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${d.name}</span></div><span style="font-size:13px;color:${d.color};font-weight:700">${pct}%</span></div><div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div><div style="font-size:13px;color:var(--text2);margin-bottom:6px">📋 ${d.tactics}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${d.drugs.map(dr=>`<span class="tag" style="background:#0ea5e922;color:var(--accent2);border:1px solid #0ea5e944;font-size:11px">💊 ${dr}</span>`).join('')}</div></div>`;
   }).join('');
 }
 
